@@ -4,13 +4,23 @@ public enum ContentType {
     MOVIE("Movie"),
     SERIES("Series");
 
-    private final String description;
+    private final String type;
 
-    ContentType(String description) {
-        this.description = description;
+    ContentType(String type) {
+        this.type = type;
     }
 
-    public String getDescription() {
-        return description;
+    public static ContentType contentTypeFromType(String type) {
+        for(ContentType contentType : ContentType.values()) {
+            if(contentType.getType().equals(type)) {
+                return contentType;
+            }
+        }
+
+        throw new IllegalArgumentException("Invalid content type: "+type);
+    }
+
+    public String getType() {
+        return type;
     }
 }

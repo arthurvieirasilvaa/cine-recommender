@@ -10,13 +10,23 @@ public enum Genre {
     THRILLER("Thriller"),
     DOCUMENTARY("Documentary");
 
-    private final String description;
+    private final String name;
 
-    Genre(String description) {
-        this.description = description;
+    Genre(String name) {
+        this.name = name;
     }
 
-    public String getDescription() {
-        return description;
+    public static Genre genreFromName(String text) {
+        for(Genre genre : Genre.values()) {
+            if(genre.getName().equals(text)) {
+                return genre;
+            }
+        }
+
+        throw new IllegalArgumentException("Ivalid genre: "+text);
+    }
+
+    public String getName() {
+        return name;
     }
 }

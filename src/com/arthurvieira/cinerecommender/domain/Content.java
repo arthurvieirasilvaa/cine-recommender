@@ -1,38 +1,31 @@
 package com.arthurvieira.cinerecommender.domain;
 
-import java.time.LocalDate;
+import java.time.Year;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 public abstract class Content {
     protected long id;
     protected String title;
-    protected LocalDate releaseYear;
+    protected Year releaseYear;
     protected Genre genre;
     protected AgeRating ageRating;
     protected ContentType contentType;
     protected List<Rating> ratings;
 
-    public Content(long id, String title, LocalDate releaseYear, ContentType contentType) {
+    public Content(long id, String title, Year releaseYear, Genre genre, AgeRating ageRating, ContentType contentType) {
+        if(title == null || title.isBlank()) {
+            throw new IllegalArgumentException("Title cannot be null or blank!");
+        }
+
         this.id = id;
         this.title = title;
         this.releaseYear = releaseYear;
-        this.contentType = contentType;
-    }
-
-    public Content(long id, String title, LocalDate releaseYear, Genre genre, ContentType contentType) {
-        this(id, title, releaseYear, contentType);
-        this.contentType = contentType;
-    }
-
-    public Content(long id, String title, LocalDate releaseYear, ContentType contentType, Genre genre, AgeRating ageRating) {
-        this(id, title, releaseYear, genre, contentType);
+        this.genre = genre;
         this.ageRating = ageRating;
-    }
-
-    public Content(long id, String title, LocalDate releaseYear, Genre genre, AgeRating ageRating, ContentType contentType, List<Rating> ratings) {
-        this(id, title, releaseYear, contentType, genre, ageRating);
-        this.ratings = ratings;
+        this.contentType = contentType;
+        this.ratings = new ArrayList<>();
     }
 
     @Override
@@ -51,10 +44,6 @@ public abstract class Content {
         return id;
     }
 
-    public void setId(long id) {
-        this.id = id;
-    }
-
     public String getTitle() {
         return title;
     }
@@ -63,11 +52,11 @@ public abstract class Content {
         this.title = title;
     }
 
-    public LocalDate getReleaseYear() {
+    public Year getReleaseYear() {
         return releaseYear;
     }
 
-    public void setReleaseYear(LocalDate releaseYear) {
+    public void setReleaseYear(Year releaseYear) {
         this.releaseYear = releaseYear;
     }
 
@@ -96,10 +85,6 @@ public abstract class Content {
     }
 
     public List<Rating> getRatings() {
-        return ratings;
-    }
-
-    public void setRatings(List<Rating> ratings) {
-        this.ratings = ratings;
+        return List.copyOf(ratings);
     }
 }

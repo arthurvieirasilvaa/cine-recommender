@@ -1,32 +1,22 @@
 package com.arthurvieira.cinerecommender.domain;
 
-import java.time.LocalDate;
-import java.util.List;
+import java.time.Year;
 
 public class Series extends Content {
-    private int numberOfSeasons;
-    private int totalEpisodes;
+    private final int numberOfSeasons;
+    private final int totalEpisodes;
 
-    public Series(long id, String title, LocalDate releaseYear, ContentType contentType, int numberOfSeasons, int totalEpisodes) {
-        super(id, title, releaseYear, contentType);
-        this.numberOfSeasons = numberOfSeasons;
-        this.totalEpisodes = totalEpisodes;
-    }
+    public Series(long id, String title, Year releaseYear, Genre genre, AgeRating ageRating, int numberOfSeasons, int totalEpisodes) {
+        super(id, title, releaseYear, genre, ageRating, ContentType.SERIES);
 
-    public Series(long id, String title, LocalDate releaseYear, Genre genre, ContentType contentType, int numberOfSeasons, int totalEpisodes) {
-        super(id, title, releaseYear, genre, contentType);
-        this.numberOfSeasons = numberOfSeasons;
-        this.totalEpisodes = totalEpisodes;
-    }
+        if(numberOfSeasons <= 0) {
+            throw new IllegalArgumentException("Number of seasons must be positive!");
+        }
 
-    public Series(long id, String title, LocalDate releaseYear, ContentType contentType, Genre genre, AgeRating ageRating, int numberOfSeasons, int totalEpisodes) {
-        super(id, title, releaseYear, contentType, genre, ageRating);
-        this.numberOfSeasons = numberOfSeasons;
-        this.totalEpisodes = totalEpisodes;
-    }
+        if(totalEpisodes <= 0) {
+            throw new IllegalArgumentException("Total episodes must be positive!");
+        }
 
-    public Series(long id, String title, LocalDate releaseYear, Genre genre, AgeRating ageRating, ContentType contentType, List<Rating> ratings, int numberOfSeasons, int totalEpisodes) {
-        super(id, title, releaseYear, genre, ageRating, contentType, ratings);
         this.numberOfSeasons = numberOfSeasons;
         this.totalEpisodes = totalEpisodes;
     }
@@ -34,13 +24,13 @@ public class Series extends Content {
     @Override
     public String toString() {
         return "Series{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", releaseYear=" + releaseYear +
-                ", genre=" + genre +
-                ", ageRating=" + ageRating +
-                ", contentType=" + contentType +
-                ", ratings=" + ratings +
+                "id=" + getId() +
+                ", title='" + getTitle() + '\'' +
+                ", releaseYear=" + getReleaseYear() +
+                ", genre=" + getGenre() +
+                ", ageRating=" + getAgeRating() +
+                ", contentType=" + getContentType() +
+                ", ratings=" + getRatings() +
                 ", numberOfSeasons=" + numberOfSeasons +
                 ", totalEpisodes=" + totalEpisodes +
                 '}';
@@ -50,15 +40,7 @@ public class Series extends Content {
         return numberOfSeasons;
     }
 
-    public void setNumberOfSeasons(int numberOfSeasons) {
-        this.numberOfSeasons = numberOfSeasons;
-    }
-
     public int getTotalEpisodes() {
         return totalEpisodes;
-    }
-
-    public void setTotalEpisodes(int totalEpisodes) {
-        this.totalEpisodes = totalEpisodes;
     }
 }

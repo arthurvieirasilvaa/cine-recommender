@@ -14,11 +14,8 @@ public abstract class Content {
     protected ContentType contentType;
     protected List<Rating> ratings;
 
-    public Content(long id, String title, Year releaseYear, Genre genre, AgeRating ageRating, ContentType contentType) {
-        if(title == null || title.isBlank()) {
-            throw new IllegalArgumentException("Title cannot be null or blank!");
-        }
-
+    protected Content(long id, String title, Year releaseYear, Genre genre, AgeRating ageRating, ContentType contentType) {
+        this.title = title;
         this.id = id;
         this.title = title;
         this.releaseYear = releaseYear;

@@ -8,15 +8,6 @@ public class Series extends Content {
 
     public Series(long id, String title, Year releaseYear, Genre genre, AgeRating ageRating, int numberOfSeasons, int totalEpisodes) {
         super(id, title, releaseYear, genre, ageRating, ContentType.SERIES);
-
-        if(numberOfSeasons <= 0) {
-            throw new IllegalArgumentException("Number of seasons must be positive!");
-        }
-
-        if(totalEpisodes <= 0) {
-            throw new IllegalArgumentException("Total episodes must be positive!");
-        }
-
         this.numberOfSeasons = numberOfSeasons;
         this.totalEpisodes = totalEpisodes;
     }

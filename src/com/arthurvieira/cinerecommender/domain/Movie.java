@@ -9,11 +9,6 @@ public class Movie extends Content {
 
     public Movie(long id, String title, Year releaseYear, Genre genre, AgeRating ageRating, Duration duration) {
         super(id, title, releaseYear, genre, ageRating, ContentType.MOVIE);
-
-        if(duration == null || duration.isNegative() || duration.isZero()) {
-            throw new IllegalArgumentException("Movie duration must be positive!");
-        }
-
         this.duration = duration;
     }
 

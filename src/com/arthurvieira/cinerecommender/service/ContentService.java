@@ -4,6 +4,7 @@ import com.arthurvieira.cinerecommender.domain.AgeRating;
 import com.arthurvieira.cinerecommender.domain.Content;
 import com.arthurvieira.cinerecommender.domain.Genre;
 import com.arthurvieira.cinerecommender.domain.Movie;
+import com.arthurvieira.cinerecommender.exception.ContentNotExistException;
 import com.arthurvieira.cinerecommender.exception.InvalidDurationException;
 import com.arthurvieira.cinerecommender.exception.InvalidIdException;
 import com.arthurvieira.cinerecommender.exception.InvalidReleaseYearException;
@@ -47,5 +48,21 @@ public class ContentService {
         Movie movie = new Movie(id, title, releaseYear, genre, ageRating);
         contents.add(movie);
         return movie;
+    }
+
+    public Content deleteContent(String title) {
+        Content content = searchContent(title);
+        contents.remove(content);
+        return content;
+    }
+
+    public Content searchContent(String title) {
+        for(Content content : contents) {
+            if(content.getTitle().equals(title)) {
+                return content;
+            }
+        }
+
+        throw new ContentNotExistException("A obra "+title+" não existe!");
     }
 }

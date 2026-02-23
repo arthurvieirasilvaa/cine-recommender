@@ -9,9 +9,9 @@ import java.util.List;
 
 public interface ContentRepository {
     Content save(Content content);
-    void delete(Content content);
-    long generateId();
-    List<Content> listByGenre(Genre genre);
-    List<Content> listByType(ContentType contentType);
-    List<Content> listByAgeRating(AgeRating ageRating);
+    void deleteById(long id);
+    Content findById(long id);
+    List<Content> findByGenre(Genre genre);
+    List<Content> findByType(ContentType contentType);
+    List<Content> findByAgeRating(AgeRating ageRating);
 }

@@ -37,6 +37,10 @@ public abstract class Content {
         return Objects.hashCode(id);
     }
 
+    public void setId(long id) {
+        this.id = id;
+    }
+
     public long getId() {
         return id;
     }

@@ -1,17 +1,16 @@
 package com.arthurvieira.cinerecommender.repository;
 
-import com.arthurvieira.cinerecommender.domain.AgeRating;
-import com.arthurvieira.cinerecommender.domain.Content;
-import com.arthurvieira.cinerecommender.domain.ContentType;
-import com.arthurvieira.cinerecommender.domain.Genre;
+import com.arthurvieira.cinerecommender.domain.*;
+import com.arthurvieira.cinerecommender.exception.ContentNotExistException;
+import com.arthurvieira.cinerecommender.exception.InvalidContentException;
+import com.arthurvieira.cinerecommender.exception.InvalidContentTypeException;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.nio.Buffer;
+import java.io.*;
+import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.time.Duration;
+import java.time.Year;
+import java.util.ArrayList;
 import java.util.List;
 
 public class FileContentRepository implements ContentRepository {
@@ -22,58 +21,158 @@ public class FileContentRepository implements ContentRepository {
     public FileContentRepository(Path path) {
         this.path = path;
         this.contents = loadFromFile();
-        this.nextId = generateId();
+        this.nextId = generateNextId();
     }
 
-    public List<Content> loadFromFile() {
+    private List<Content> loadFromFile() {
+        List<Content> fileContents = new ArrayList<>();
+
+        if(Files.notExists(this.path)) {
+            return fileContents;
+        }
+
         try(FileReader fileReader = new FileReader(path.toFile());
             BufferedReader bufferedReader = new BufferedReader(fileReader)) {
             String line;
 
             while ((line = bufferedReader.readLine()) != null) {
-                System.out.println(line);
+                Content content = parseLine(line);
+                fileContents.add(content);
             }
         } catch (IOException e) {
             System.out.println("Ocorreu um erro ao carregar os dados do arquivo "+path.getFileName());
         }
 
-        return null;
+        return fileContents;
+    }
+
+    private Content parseLine(String line) {
+        String[] contentfields = line.split(";");
+
+        // Getting the fields of the current element:
+        long id = Long.parseLong(contentfields[0]);
+        ContentType type = ContentType.valueOf(contentfields[1]);
+        String title = contentfields[2];
+        Year year = Year.parse(contentfields[3]);
+        Genre genre = Genre.valueOf(contentfields[4]);
+        AgeRating ageRating = AgeRating.valueOf(contentfields[5]);
+
+        if(type == ContentType.MOVIE) {
+            Duration duration = Duration.parse(contentfields[6]);
+
+            return new Movie(id, title, year, genre, ageRating, duration);
+        }
+
+        if(type == ContentType.SERIES) {
+            int numberOfSeasons = Integer.parseInt(contentfields[6]);
+            int totalEpisodes = Integer.parseInt(contentfields[7]);
+
+            return new Series(id, title, year, genre, ageRating, numberOfSeasons, totalEpisodes);
+        }
+
+        throw new InvalidContentTypeException("O tipo do conteúdo "+type+" é inválido!");
+    }
+
+    private String convertContentToFileLine(Content content) {
+        if(content instanceof Movie) {
+            return content.getId() + ";" +
+                    ContentType.MOVIE.getType() + ";" +
+                    content.getReleaseYear() + ";" +
+                    content.getGenre() + ";" +
+                    content.getAgeRating() + ";" +
+                    ((Movie) content).getDuration().toMinutes();
+        }
+
+        if(content instanceof Series) {
+            return content.getId() + ";" +
+                    ContentType.SERIES.getType() + ";" +
+                    content.getTitle() + ";" +
+                    content.getReleaseYear() + ";" +
+                    content.getGenre() + ";" +
+                    content.getAgeRating() + ";" +
+                    ((Series) content).getNumberOfSeasons() + ";" +
+                    ((Series) content).getTotalEpisodes();
+        }
+
+        throw new InvalidContentException("A obra precisa ser um filme ou uma série!");
+    }
+
+    private void writeAllToFile() {
+        try(FileWriter fileWriter = new FileWriter(path.toFile());
+            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter)) {
+            for(Content content : this.contents) {
+                bufferedWriter.write(convertContentToFileLine(content));
+                bufferedWriter.newLine();
+            }
+        } catch (IOException e) {
+            System.out.println("Ocorreu um erro ao salvar os dados no arquivo " + path.getFileName());
+        }
     }
 
     @Override
     public Content save(Content content) {
-        return null;
+        // Checks if the content is the first to be written in the file:
+        if(content.getId() == 0) {
+            content.setId(this.nextId);
+            this.contents.add(content);
+        }
+
+        else {
+            // Delete a content in the file with the same ID
+            // as the content passed (if exists):
+            for(Content c : this.contents) {
+                if(c.getId() == content.getId()) {
+                    this.contents.remove(c);
+                    contents.add(content);
+                }
+            }
+        }
+
+        writeAllToFile();
+        return content;
     }
 
     @Override
-    public void delete(Content content) {
+    public void deleteById(long id) {
+        for(Content content : this.contents) {
+            if(content.getId() == id) {
+                this.contents.remove(content);
+                writeAllToFile();
+                return;
+            }
+        }
 
+        throw new ContentNotExistException("A obra de ID "+id+"não existe!");
     }
 
-    @Override
-    public long generateId() {
+    public long generateNextId() {
         long maxId = 0;
-        for(Content content : contents) {
+        for(Content content : this.contents) {
             if(content.getId() > maxId) {
                 maxId = content.getId();
             }
         }
 
-        return maxId;
+        return maxId+1;
     }
 
     @Override
-    public List<Content> listByGenre(Genre genre) {
+    public Content findById(long id) {
+        return null;
+    }
+
+    @Override
+    public List<Content> findByGenre(Genre genre) {
         return List.of();
     }
 
     @Override
-    public List<Content> listByType(ContentType contentType) {
+    public List<Content> findByType(ContentType contentType) {
         return List.of();
     }
 
     @Override
-    public List<Content> listByAgeRating(AgeRating ageRating) {
+    public List<Content> findByAgeRating(AgeRating ageRating) {
         return List.of();
     }
 }

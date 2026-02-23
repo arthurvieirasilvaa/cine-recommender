@@ -11,12 +11,13 @@ import java.nio.file.Path;
 import java.time.Duration;
 import java.time.Year;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class FileContentRepository implements ContentRepository {
     private final Path path;
     private final List<Content> contents;
-    private final long nextId;
+    private long nextId;
 
     public FileContentRepository(Path path) {
         this.path = path;
@@ -58,7 +59,7 @@ public class FileContentRepository implements ContentRepository {
         AgeRating ageRating = AgeRating.valueOf(contentfields[5]);
 
         if(type == ContentType.MOVIE) {
-            Duration duration = Duration.parse(contentfields[6]);
+            Duration duration = Duration.ofMinutes(Long.parseLong(contentfields[6]));
 
             return new Movie(id, title, year, genre, ageRating, duration);
         }
@@ -77,6 +78,7 @@ public class FileContentRepository implements ContentRepository {
         if(content instanceof Movie) {
             return content.getId() + ";" +
                     ContentType.MOVIE.getType() + ";" +
+                    content.getTitle() + ";" +
                     content.getReleaseYear() + ";" +
                     content.getGenre() + ";" +
                     content.getAgeRating() + ";" +
@@ -113,19 +115,15 @@ public class FileContentRepository implements ContentRepository {
     public Content save(Content content) {
         // Checks if the content is the first to be written in the file:
         if(content.getId() == 0) {
-            content.setId(this.nextId);
+            content.setId(this.nextId++);
             this.contents.add(content);
         }
 
         else {
             // Delete a content in the file with the same ID
             // as the content passed (if exists):
-            for(Content c : this.contents) {
-                if(c.getId() == content.getId()) {
-                    this.contents.remove(c);
-                    contents.add(content);
-                }
-            }
+            this.contents.removeIf(c -> c.getId() == content.getId());
+            this.contents.add(content);
         }
 
         writeAllToFile();
@@ -134,15 +132,12 @@ public class FileContentRepository implements ContentRepository {
 
     @Override
     public void deleteById(long id) {
-        for(Content content : this.contents) {
-            if(content.getId() == id) {
-                this.contents.remove(content);
-                writeAllToFile();
-                return;
-            }
-        }
+        boolean removed = this.contents.removeIf(c -> c.getId() == id);
 
-        throw new ContentNotExistException("A obra de ID "+id+"não existe!");
+        if(!removed) {
+            throw new ContentNotExistException("A obra de ID "+id+"não existe!");
+        }
+        writeAllToFile();
     }
 
     public long generateNextId() {
@@ -158,21 +153,51 @@ public class FileContentRepository implements ContentRepository {
 
     @Override
     public Content findById(long id) {
-        return null;
+        for(Content content : this.contents) {
+            if(content.getId() == id) {
+                return content;
+            }
+        }
+
+        throw new ContentNotExistException("A obra de ID "+id+"não existe!");
     }
 
     @Override
     public List<Content> findByGenre(Genre genre) {
-        return List.of();
+        List<Content> contentsFiltered = new ArrayList<>();
+
+        for(Content content : this.contents) {
+            if(content.getGenre() == genre) {
+                contentsFiltered.add(content);
+            }
+        }
+
+        return contentsFiltered;
     }
 
     @Override
     public List<Content> findByType(ContentType contentType) {
-        return List.of();
+        List<Content> contentsFiltered = new ArrayList<>();
+
+        for(Content content : this.contents) {
+            if(content.getContentType() == contentType) {
+                contentsFiltered.add(content);
+            }
+        }
+
+        return contentsFiltered;
     }
 
     @Override
     public List<Content> findByAgeRating(AgeRating ageRating) {
-        return List.of();
+        List<Content> contentsFiltered = new ArrayList<>();
+
+        for(Content content : this.contents) {
+            if(content.getAgeRating() == ageRating) {
+                contentsFiltered.add(content);
+            }
+        }
+
+        return contentsFiltered;
     }
 }

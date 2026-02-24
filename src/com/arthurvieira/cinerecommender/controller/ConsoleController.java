@@ -2,17 +2,17 @@ package com.arthurvieira.cinerecommender.controller;
 
 import com.arthurvieira.cinerecommender.ui.ConsoleMenu;
 import com.arthurvieira.cinerecommender.ui.InputHandler;
+import com.arthurvieira.cinerecommender.ui.MenuOptions;
 
 public class ConsoleController {
-    private static final short EXIT_OPTION = 0;
-    private static final short BACK_OPTION = -1;
-
     private final ConsoleMenu consoleMenu;
     private final InputHandler inputHandler;
+    private final ContentController contentController;
 
     public ConsoleController() {
         this.consoleMenu = new ConsoleMenu();
         this.inputHandler = new InputHandler();
+        this.contentController = new ContentController(consoleMenu, inputHandler);
     }
 
     public void start() {
@@ -24,7 +24,7 @@ public class ConsoleController {
 
             switch (option) {
                 case 1:
-                    // start ContentController
+                    this.contentController.start();
                     break;
                 case 2:
                     this.consoleMenu.showRecommendationsMenu();
@@ -35,6 +35,6 @@ public class ConsoleController {
                 default:
                     System.out.println("Opção inválida!");
             }
-        } while (option != EXIT_OPTION);
+        } while (option != MenuOptions.EXIT);
     }
 }

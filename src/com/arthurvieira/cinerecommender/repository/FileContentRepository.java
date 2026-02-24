@@ -11,7 +11,6 @@ import java.nio.file.Path;
 import java.time.Duration;
 import java.time.Year;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class FileContentRepository implements ContentRepository {
@@ -50,7 +49,7 @@ public class FileContentRepository implements ContentRepository {
     private Content parseLine(String line) {
         String[] contentfields = line.split(";");
 
-        // Getting the fields of the current element:
+        // Getting the fields of the current content:
         long id = Long.parseLong(contentfields[0]);
         ContentType type = ContentType.valueOf(contentfields[1]);
         String title = contentfields[2];

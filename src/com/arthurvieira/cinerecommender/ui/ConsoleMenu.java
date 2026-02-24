@@ -1,14 +1,11 @@
 package com.arthurvieira.cinerecommender.ui;
 
 public class ConsoleMenu {
-    private static final short EXIT_OPTION = 0;
-    private static final short BACK_OPTION = -1;
-
     public void showMainMenu() {
         System.out.println("\n########### Cine Recommender ###########");
         System.out.println("1 - Gerenciar Conteúdos");
-        System.out.println("3 - Recomendações");
-        System.out.println("4 - Usuários");
+        System.out.println("2 - Recomendações");
+        System.out.println("3 - Usuários");
         System.out.println("0 - Sair");
         System.out.println("------------------------------");
         System.out.println("Digite uma opção: ");

@@ -1,5 +1,8 @@
 package com.arthurvieira.cinerecommender.ui;
 
+import com.arthurvieira.cinerecommender.domain.AgeRating;
+import com.arthurvieira.cinerecommender.domain.Genre;
+
 public class ConsoleMenu {
     public void showMainMenu() {
         System.out.println("\n########### Cine Recommender ###########");
@@ -45,5 +48,25 @@ public class ConsoleMenu {
         System.out.println("-1 - Voltar");
         System.out.println("------------------------------");
         System.out.println("Digite uma opção: ");
+    }
+
+    public void showGenreOptions() {
+        System.out.println("Opções de Gêneros:");
+
+        int i = 1;
+        for(Genre genre : Genre.values()) {
+            System.out.println("\t"+i+" - "+genre.getName());
+            i++;
+        }
+    }
+
+    public void showAgeRatingOptions() {
+        System.out.println("Opções de Classificações Indicativas:");
+
+        int i = 1;
+        for(AgeRating ageRating : AgeRating.values()) {
+            System.out.println("\t"+i+" - "+ageRating.getDescription());
+            i++;
+        }
     }
 }

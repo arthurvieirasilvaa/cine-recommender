@@ -9,10 +9,12 @@ public class ConsoleController {
     private final InputHandler inputHandler;
     private final ContentController contentController;
 
-    public ConsoleController() {
-        this.consoleMenu = new ConsoleMenu();
-        this.inputHandler = new InputHandler();
-        this.contentController = new ContentController(consoleMenu, inputHandler);
+    public ConsoleController(ConsoleMenu consoleMenu,
+                             InputHandler inputHandler,
+                             ContentController contentController) {
+        this.consoleMenu = consoleMenu;
+        this.inputHandler = inputHandler;
+        this.contentController = contentController;
     }
 
     public void start() {

@@ -1,5 +1,12 @@
 package com.arthurvieira.cinerecommender.ui;
 
+import com.arthurvieira.cinerecommender.domain.Genre;
+
+import java.security.cert.TrustAnchor;
+import java.text.SimpleDateFormat;
+import java.time.Duration;
+import java.time.Year;
+import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
 public class InputHandler {
@@ -26,5 +33,34 @@ public class InputHandler {
         } while (text.isEmpty());
 
         return text;
+    }
+
+    public Year readYear() {
+        while (true) {
+            try {
+                String yearString = this.readText();
+                return Year.parse(yearString);
+            } catch (DateTimeParseException e) {
+                System.out.println("Formato de ano inválido! Use (yyyy)");
+            }
+        }
+    }
+
+    public Duration readDuration() {
+        while (true) {
+            try {
+                String minutesString = this.readText();
+                long minutes = Long.parseLong(minutesString);
+
+                if(minutes <= 0) {
+                    System.out.println("A duração deve ser positiva!");
+                    continue;
+                }
+
+                return Duration.ofMinutes(minutes);
+            } catch (NumberFormatException e) {
+                System.out.println("Duração inválida! Informe a duração em minutos");
+            }
+        }
     }
 }

@@ -1,5 +1,7 @@
 package com.arthurvieira.cinerecommender.domain;
 
+import com.arthurvieira.cinerecommender.exception.InvalidAgeRatingException;
+
 public enum AgeRating {
     G("General Audiences (G)", 0),
     PG("Parental Guidance Suggested (PG)", 7),
@@ -19,14 +21,14 @@ public enum AgeRating {
         return age >= this.minimumAge;
     }
 
-    public static AgeRating ageRatingFromDescription(String description) {
-        for(AgeRating ageRating : AgeRating.values()) {
-            if(ageRating.getDescription().equals(description)) {
-                return ageRating;
-            }
+    public static AgeRating fromOption(int option) {
+        AgeRating[] ageRatingsValues = AgeRating.values();
+
+        if(option < 1 || option > ageRatingsValues.length) {
+            throw new InvalidAgeRatingException("Opção inválida para a classificação indicativa!");
         }
 
-        throw new IllegalArgumentException("Invalid age rating: "+description);
+        return ageRatingsValues[option-1];
     }
 
     public String getDescription() {

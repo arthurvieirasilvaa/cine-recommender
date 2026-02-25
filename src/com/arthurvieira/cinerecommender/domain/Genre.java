@@ -1,5 +1,7 @@
 package com.arthurvieira.cinerecommender.domain;
 
+import com.arthurvieira.cinerecommender.exception.InvalidGenreException;
+
 public enum Genre {
     ACTION("Action"),
     DRAMA("Drama"),
@@ -16,14 +18,14 @@ public enum Genre {
         this.name = name;
     }
 
-    public static Genre genreFromName(String text) {
-        for(Genre genre : Genre.values()) {
-            if(genre.getName().equals(text)) {
-                return genre;
-            }
+    public static Genre fromOption(int option) {
+        Genre[] genreValues = Genre.values();
+
+        if(option < 1 || option > genreValues.length) {
+            throw new InvalidGenreException("Opção inválida para o gênero!");
         }
 
-        throw new IllegalArgumentException("Ivalid genre: "+text);
+        return genreValues[option-1];
     }
 
     public String getName() {

@@ -1,12 +1,7 @@
 package com.arthurvieira.cinerecommender.service;
 
-import com.arthurvieira.cinerecommender.domain.AgeRating;
-import com.arthurvieira.cinerecommender.domain.Content;
-import com.arthurvieira.cinerecommender.domain.Genre;
-import com.arthurvieira.cinerecommender.domain.Movie;
-import com.arthurvieira.cinerecommender.exception.InvalidDurationException;
+import com.arthurvieira.cinerecommender.domain.*;
 import com.arthurvieira.cinerecommender.exception.InvalidIdException;
-import com.arthurvieira.cinerecommender.exception.InvalidReleaseYearException;
 import com.arthurvieira.cinerecommender.repository.ContentRepository;
 
 import java.time.Duration;
@@ -25,25 +20,19 @@ public class ContentService {
         }
     }
 
-    public void validateReleaseYear(Year releaseYear) {
-        if(releaseYear.getValue() <= Year.MIN_VALUE || releaseYear.getValue() >= Year.MAX_VALUE) {
-            throw new InvalidReleaseYearException("O ano de lançamento informado está inválido!");
-        }
-    }
-
-    public void validateDuration(Duration duration) {
-        if(duration.isNegative() || duration.isZero()) {
-            throw new InvalidDurationException("A duração do filme deve ser positiva!");
-        }
-    }
-
-    public Movie createMovie(String title, Year releaseYear, Genre genre, AgeRating ageRating, Duration duration) {
-        validateReleaseYear(releaseYear);
-        validateDuration(duration);
-
+    public Movie createMovie(String title, Year releaseYear, Genre genre,
+                             AgeRating ageRating, Duration duration) {
         Movie movie = new Movie(0, title, releaseYear, genre, ageRating, duration);
 
         return (Movie) this.contentRepository.save(movie);
+    }
+
+    public Series createSeries(String title, Year releaseYear, Genre genre,
+                               AgeRating ageRating, int numberOfSeasons,
+                               int totalEpisodes) {
+        Series series = new Series(0, title, releaseYear, genre, ageRating, numberOfSeasons, totalEpisodes);
+
+        return (Series) this.contentRepository.save(series);
     }
 
     public void deleteContent(long id) {

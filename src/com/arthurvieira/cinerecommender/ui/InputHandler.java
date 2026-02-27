@@ -16,7 +16,7 @@ public class InputHandler {
         this.scanner = new Scanner(System.in);
     }
 
-    public int readOption() {
+    public int readInt() {
         while(true) {
             try {
                 return Integer.parseInt(this.scanner.nextLine());

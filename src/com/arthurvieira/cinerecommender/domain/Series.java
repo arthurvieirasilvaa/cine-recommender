@@ -1,5 +1,8 @@
 package com.arthurvieira.cinerecommender.domain;
 
+import com.arthurvieira.cinerecommender.exception.InvalidNumberOfSeasonsException;
+import com.arthurvieira.cinerecommender.exception.InvalidTotalEpisodesException;
+
 import java.time.Year;
 
 public class Series extends Content {
@@ -8,7 +11,19 @@ public class Series extends Content {
 
     public Series(long id, String title, Year releaseYear, Genre genre, AgeRating ageRating, int numberOfSeasons, int totalEpisodes) {
         super(id, title, releaseYear, genre, ageRating, ContentType.SERIES);
+
+        // Validate number of seasons:
+        if(numberOfSeasons <= 0) {
+            throw new InvalidNumberOfSeasonsException("O número de temporadas deve ser positivo!");
+        }
+
         this.numberOfSeasons = numberOfSeasons;
+
+        // Validate total episodes:
+        if(totalEpisodes <= 0) {
+            throw new InvalidTotalEpisodesException("O total de episódios deve ser positivo!");
+        }
+
         this.totalEpisodes = totalEpisodes;
     }
 

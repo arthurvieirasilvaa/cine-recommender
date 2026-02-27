@@ -22,7 +22,7 @@ public class ConsoleController {
 
         do {
             this.consoleMenu.showMainMenu();
-            option = this.inputHandler.readOption();
+            option = this.inputHandler.readInt();
 
             switch (option) {
                 case 1:

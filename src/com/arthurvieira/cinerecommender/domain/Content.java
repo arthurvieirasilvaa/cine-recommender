@@ -1,5 +1,7 @@
 package com.arthurvieira.cinerecommender.domain;
 
+import com.arthurvieira.cinerecommender.exception.InvalidReleaseYearException;
+
 import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +20,12 @@ public abstract class Content {
         this.title = title;
         this.id = id;
         this.title = title;
+
+        // Validate release year:
+        if(releaseYear.isAfter(Year.now())) {
+            throw new InvalidReleaseYearException("O ano de lançamento informado está inválido!");
+        }
+
         this.releaseYear = releaseYear;
         this.genre = genre;
         this.ageRating = ageRating;

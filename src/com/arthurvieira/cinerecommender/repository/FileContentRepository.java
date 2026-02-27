@@ -10,12 +10,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
 import java.time.Year;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class FileContentRepository implements ContentRepository {
     private final Path path;
-    private final List<Content> contents;
+    private final Map<Long, Content> contents;
     private long nextId;
 
     public FileContentRepository(Path path) {
@@ -24,8 +23,8 @@ public class FileContentRepository implements ContentRepository {
         this.nextId = generateNextId();
     }
 
-    private List<Content> loadFromFile() {
-        List<Content> fileContents = new ArrayList<>();
+    private Map<Long, Content> loadFromFile() {
+        Map<Long, Content> fileContents = new LinkedHashMap<>();
 
         if(Files.notExists(this.path)) {
             return fileContents;
@@ -37,7 +36,7 @@ public class FileContentRepository implements ContentRepository {
 
             while ((line = bufferedReader.readLine()) != null) {
                 Content content = parseLine(line);
-                fileContents.add(content);
+                fileContents.put(content.getId(), content);
             }
         } catch (IOException e) {
             System.out.println("Ocorreu um erro ao carregar os dados do arquivo "+path.getFileName());
@@ -101,7 +100,7 @@ public class FileContentRepository implements ContentRepository {
     private void writeAllToFile() {
         try(FileWriter fileWriter = new FileWriter(path.toFile());
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter)) {
-            for(Content content : this.contents) {
+            for(Content content : this.contents.values()) {
                 bufferedWriter.write(convertContentToFileLine(content));
                 bufferedWriter.newLine();
             }
@@ -115,35 +114,28 @@ public class FileContentRepository implements ContentRepository {
         // Checks if the content is the first to be written in the file:
         if(content.getId() == 0) {
             content.setId(this.nextId++);
-            this.contents.add(content);
         }
 
-        else {
-            // Delete a content in the file with the same ID
-            // as the content passed (if exists):
-            this.contents.removeIf(c -> c.getId() == content.getId());
-            this.contents.add(content);
-        }
-
+        this.contents.put(content.getId(), content);
         writeAllToFile();
+
         return content;
     }
 
     @Override
     public void deleteById(long id) {
-        boolean removed = this.contents.removeIf(c -> c.getId() == id);
-
-        if(!removed) {
+        if(this.contents.remove(id) == null) {
             throw new ContentNotExistException("A obra de ID "+id+"não existe!");
         }
+
         writeAllToFile();
     }
 
     public long generateNextId() {
         long maxId = 0;
-        for(Content content : this.contents) {
-            if(content.getId() > maxId) {
-                maxId = content.getId();
+        for(Long id : this.contents.keySet()) {
+            if(id > maxId) {
+                maxId = id;
             }
         }
 
@@ -152,10 +144,10 @@ public class FileContentRepository implements ContentRepository {
 
     @Override
     public Content findById(long id) {
-        for(Content content : this.contents) {
-            if(content.getId() == id) {
-                return content;
-            }
+        Content content = this.contents.get(id);
+
+        if(content != null) {
+            return content;
         }
 
         throw new ContentNotExistException("A obra de ID "+id+"não existe!");
@@ -165,7 +157,7 @@ public class FileContentRepository implements ContentRepository {
     public List<Content> findByGenre(Genre genre) {
         List<Content> contentsFiltered = new ArrayList<>();
 
-        for(Content content : this.contents) {
+        for(Content content :this.contents.values()) {
             if(content.getGenre() == genre) {
                 contentsFiltered.add(content);
             }
@@ -178,7 +170,7 @@ public class FileContentRepository implements ContentRepository {
     public List<Content> findByType(ContentType contentType) {
         List<Content> contentsFiltered = new ArrayList<>();
 
-        for(Content content : this.contents) {
+        for(Content content : this.contents.values()) {
             if(content.getContentType() == contentType) {
                 contentsFiltered.add(content);
             }
@@ -191,7 +183,7 @@ public class FileContentRepository implements ContentRepository {
     public List<Content> findByAgeRating(AgeRating ageRating) {
         List<Content> contentsFiltered = new ArrayList<>();
 
-        for(Content content : this.contents) {
+        for(Content content : this.contents.values()) {
             if(content.getAgeRating() == ageRating) {
                 contentsFiltered.add(content);
             }

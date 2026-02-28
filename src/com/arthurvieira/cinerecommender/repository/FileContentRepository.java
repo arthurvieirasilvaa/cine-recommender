@@ -63,7 +63,7 @@ public class FileContentRepository implements ContentRepository {
 
         // Getting the fields of the current content:
         long id = Long.parseLong(contentfields[0]);
-        ContentType type = ContentType.valueOf(contentfields[1]);
+        ContentType type = ContentType.contentTypeFromType(contentfields[1]);
         String title = contentfields[2];
         Year year = Year.parse(contentfields[3]);
         Genre genre = Genre.valueOf(contentfields[4]);

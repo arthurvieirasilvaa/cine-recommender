@@ -17,10 +17,6 @@ public enum AgeRating {
         this.minimumAge = minimumAge;
     }
 
-    public boolean isAllowedFor(int age) {
-        return age >= this.minimumAge;
-    }
-
     public static AgeRating fromOption(int option) {
         AgeRating[] ageRatingsValues = AgeRating.values();
 

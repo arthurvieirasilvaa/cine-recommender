@@ -23,7 +23,7 @@ public class ConsoleController {
 
         while (running){
             this.consoleMenu.showMainMenu();
-            option = this.inputHandler.readInt();
+            option = this.inputHandler.readInt("Digite uma opção: ");
 
             switch (option) {
                 case 1:

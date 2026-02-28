@@ -30,7 +30,7 @@ public class ContentController {
 
         while (running){
             this.consoleMenu.showContentMenu();
-            option = this.inputHandler.readInt();
+            option = this.inputHandler.readInt("Opção: ");
 
             switch (option) {
                 case 1:
@@ -49,77 +49,39 @@ public class ContentController {
     }
 
     private void registerMovie() {
-        try {
-            System.out.print("Título: ");
-            String title = this.inputHandler.readText();
+        String title = this.inputHandler.readText("Título: ");
+        Year releaseYear = this.inputHandler.readYear("Ano de lançamento: ");
 
-            System.out.print("Ano de lançamento: ");
-            Year releaseYear = this.inputHandler.readYear();
+        this.consoleMenu.showGenreOptions();
+        Genre genre = this.inputHandler.readGenre("Opção do Gênero: ");
 
-            this.consoleMenu.showGenreOptions();
-            System.out.print("Opção: ");
-            int option = this.inputHandler.readInt();
-            Genre genre = Genre.fromOption(option);
+        this.consoleMenu.showAgeRatingOptions();
+        AgeRating ageRating = this.inputHandler.readAgeRating("Opção da Classificação Indicativa: ");
 
-            this.consoleMenu.showAgeRatingOptions();
-            System.out.print("Opção: ");
-            option = this.inputHandler.readInt();
-            AgeRating ageRating = AgeRating.fromOption(option);
+        Duration duration = this.inputHandler.readDuration("Duração (em minutos): ");
 
-            System.out.print("Duração (em minutos): ");
-            Duration duration = this.inputHandler.readDuration();
+        Movie movie = this.contentService.createMovie(title, releaseYear, genre, ageRating, duration);
 
-            Movie movie = this.contentService.createMovie(title, releaseYear, genre, ageRating, duration);
-            System.out.println("O filme "+title+" foi criado com sucesso!");
-            System.out.println("O ID gerado foi: "+movie.getId());
-        } catch (InvalidGenreException e) {
-            System.out.println("O Gênero do filme está inválido!");
-        } catch (InvalidAgeRatingException e) {
-            System.out.println("A classificação indicativa do filme está inválida!");
-        } catch (InvalidDurationException e) {
-            System.out.println("A duração do filme está inválida!");
-        } catch (Exception e) {
-            System.out.println("Ocorreu um erro ao cadastrar o filme!");
-        }
+        System.out.println("O filme "+title+" foi criado com sucesso!");
+        System.out.println("O ID gerado foi: "+movie.getId());
     }
 
     private void registerSeries() {
-        try {
-            System.out.print("Título: ");
-            String title = this.inputHandler.readText();
+        String title = this.inputHandler.readText("Título: ");
+        Year releaseYear = this.inputHandler.readYear("Ano de lançamento: ");
 
-            System.out.print("Ano de lançamento: ");
-            Year releaseYear = this.inputHandler.readYear();
+        this.consoleMenu.showGenreOptions();
+        Genre genre = this.inputHandler.readGenre("Opção do Gênero: ");
 
-            this.consoleMenu.showGenreOptions();
-            System.out.print("Opção: ");
-            int option = this.inputHandler.readInt();
-            Genre genre = Genre.fromOption(option);
+        this.consoleMenu.showAgeRatingOptions();
+        AgeRating ageRating = this.inputHandler.readAgeRating("Opção da Classificação Indicativa: ");
 
-            this.consoleMenu.showAgeRatingOptions();
-            System.out.print("Opção: ");
-            option = this.inputHandler.readInt();
-            AgeRating ageRating = AgeRating.fromOption(option);
+        int numberOfSeasons = this.inputHandler.readPositiveInt("Número de temporadas: ");
+        int totalEpisodes = this.inputHandler.readPositiveInt("Total de episódios: ");
 
-            System.out.print("Número de temporadas: ");
-            int numberOfSeasons = this.inputHandler.readInt();
+        Series series = this.contentService.createSeries(title, releaseYear, genre, ageRating, numberOfSeasons, totalEpisodes);
 
-            System.out.print("Total de episódios: ");
-            int totalEpisodes = this.inputHandler.readInt();
-
-            Series series = this.contentService.createSeries(title, releaseYear, genre, ageRating, numberOfSeasons, totalEpisodes);
-            System.out.println("A série "+title+" foi criada com sucesso!");
-            System.out.println("O ID gerado foi: "+series.getId());
-        } catch (InvalidGenreException e) {
-            System.out.println("O Gênero da série está inválido!");
-        } catch (InvalidAgeRatingException e) {
-            System.out.println("A classificação indicativa da série está inválida!");
-        } catch (InvalidNumberOfSeasonsException e) {
-            System.out.println("O número de temporadas da série está inválido!");
-        } catch (InvalidTotalEpisodesException e) {
-            System.out.println("O total de episódios da série está inválido!");
-        } catch (Exception e) {
-            System.out.println("Ocorreu um erro ao cadastrar a série!");
-        }
+        System.out.println("A série "+title+" foi criada com sucesso!");
+        System.out.println("O ID gerado foi: "+series.getId());
     }
 }

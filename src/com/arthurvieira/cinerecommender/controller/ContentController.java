@@ -1,9 +1,6 @@
 package com.arthurvieira.cinerecommender.controller;
 
-import com.arthurvieira.cinerecommender.domain.AgeRating;
-import com.arthurvieira.cinerecommender.domain.Genre;
-import com.arthurvieira.cinerecommender.domain.Movie;
-import com.arthurvieira.cinerecommender.domain.Series;
+import com.arthurvieira.cinerecommender.domain.*;
 import com.arthurvieira.cinerecommender.exception.*;
 import com.arthurvieira.cinerecommender.service.ContentService;
 import com.arthurvieira.cinerecommender.ui.ConsoleMenu;
@@ -12,6 +9,7 @@ import com.arthurvieira.cinerecommender.ui.MenuOptions;
 
 import java.time.Duration;
 import java.time.Year;
+import java.util.List;
 
 public class ContentController {
     private final ConsoleMenu consoleMenu;
@@ -38,6 +36,11 @@ public class ContentController {
                     break;
                 case 2:
                     this.registerSeries();
+                    break;
+                case 3:
+                    break;
+                case 4:
+                    this.listContents();
                     break;
                 case MenuOptions.BACK:
                     running = false;
@@ -83,5 +86,19 @@ public class ContentController {
 
         System.out.println("A série "+title+" foi criada com sucesso!");
         System.out.println("O ID gerado foi: "+series.getId());
+    }
+
+    private void listContents() {
+        List<Content> contents = this.contentService.listAll();
+
+        if(contents.isEmpty()) {
+            System.out.println("Ainda não há conteúdo cadastrado!");
+            return;
+        }
+
+        System.out.println("\n--- Conteúdos Cadastrados: ---");
+        for (Content content : contents) {
+            System.out.println(content);
+        }
     }
 }

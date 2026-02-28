@@ -21,16 +21,11 @@ public class Movie extends Content {
 
     @Override
     public String toString() {
-        return "Movie{" +
-                "id=" + getId() +
-                ", title='" + getTitle() + '\'' +
-                ", releaseYear=" + getReleaseYear() +
-                ", genre=" + getGenre() +
-                ", ageRating=" + getAgeRating() +
-                ", contentType=" + getContentType() +
-                ", ratings=" + getRatings() +
-                ", durationMinutes=" + getDuration().toMinutes() +
-                '}';
+        return "\t-> Filme " + getTitle() + " com ID " + getId() + ":\n" +
+               "\t\t- Ano de lançamento: " + getReleaseYear() + "\n" +
+                "\t\t- Gênero: " + getGenre().getName() + "\n" +
+                "\t\t- Classificação Indicativa: " + getAgeRating().getDescription() + "\n" +
+                "\t\t- Duração: " + getDuration().toMinutes() + " minutos\n";
     }
 
     public Duration getDuration() {

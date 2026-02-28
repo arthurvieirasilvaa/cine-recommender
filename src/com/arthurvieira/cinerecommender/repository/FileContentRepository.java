@@ -167,10 +167,15 @@ public class FileContentRepository implements ContentRepository {
     }
 
     @Override
+    public List<Content> listAll() {
+        return new ArrayList<>(this.contents.values());
+    }
+
+    @Override
     public List<Content> findByGenre(Genre genre) {
         List<Content> contentsFiltered = new ArrayList<>();
 
-        for(Content content :this.contents.values()) {
+        for(Content content : this.contents.values()) {
             if(content.getGenre() == genre) {
                 contentsFiltered.add(content);
             }

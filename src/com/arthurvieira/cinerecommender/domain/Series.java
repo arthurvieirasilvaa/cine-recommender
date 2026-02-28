@@ -29,17 +29,12 @@ public class Series extends Content {
 
     @Override
     public String toString() {
-        return "Series{" +
-                "id=" + getId() +
-                ", title='" + getTitle() + '\'' +
-                ", releaseYear=" + getReleaseYear() +
-                ", genre=" + getGenre() +
-                ", ageRating=" + getAgeRating() +
-                ", contentType=" + getContentType() +
-                ", ratings=" + getRatings() +
-                ", numberOfSeasons=" + numberOfSeasons +
-                ", totalEpisodes=" + totalEpisodes +
-                '}';
+        return "\t-> Série " + getTitle() + " com ID " + getId() + ":\n" +
+                "\t\t- Ano de lançamento: " + getReleaseYear() + "\n" +
+                "\t\t- Gênero: " + getGenre().getName() + "\n" +
+                "\t\t- Classificação Indicativa: " + getAgeRating().getDescription() + "\n" +
+                "\t\t- Número de temporadas: " + getNumberOfSeasons() + "\n" +
+                "\t\t- Total de episódios: " + getTotalEpisodes() + "\n";
     }
 
     public int getNumberOfSeasons() {

@@ -6,6 +6,7 @@ import com.arthurvieira.cinerecommender.repository.ContentRepository;
 
 import java.time.Duration;
 import java.time.Year;
+import java.util.List;
 
 public class ContentService {
     private final ContentRepository contentRepository;
@@ -33,6 +34,10 @@ public class ContentService {
         Series series = new Series(0, title, releaseYear, genre, ageRating, numberOfSeasons, totalEpisodes);
 
         return (Series) this.contentRepository.save(series);
+    }
+
+    public List<Content> listAll() {
+        return this.contentRepository.listAll();
     }
 
     public void deleteContent(long id) {

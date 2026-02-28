@@ -11,6 +11,7 @@ public interface ContentRepository {
     Content save(Content content);
     void deleteById(long id);
     Content findById(long id);
+    List<Content> listAll();
     List<Content> findByGenre(Genre genre);
     List<Content> findByType(ContentType contentType);
     List<Content> findByAgeRating(AgeRating ageRating);

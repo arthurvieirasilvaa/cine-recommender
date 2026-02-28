@@ -40,10 +40,13 @@ public class ContentController {
                 case 3:
                     break;
                 case 4:
-                    this.listContents();
+                    this.listAllContents();
                     break;
                 case 5:
                     this.searchById();
+                    break;
+                case 6:
+                    this.searchByGenre();
                     break;
                 case MenuOptions.BACK:
                     running = false;
@@ -91,7 +94,7 @@ public class ContentController {
         System.out.println("O ID gerado foi: "+series.getId());
     }
 
-    private void listContents() {
+    private void listAllContents() {
         List<Content> contents = this.contentService.listAll();
 
         if(contents.isEmpty()) {
@@ -99,7 +102,7 @@ public class ContentController {
             return;
         }
 
-        System.out.println("\n--- Conteúdos Cadastrados: ---");
+        System.out.println("\n--- Conteúdos Cadastrados ---");
         for (Content content : contents) {
             System.out.println(content);
         }
@@ -108,10 +111,27 @@ public class ContentController {
     private void searchById() {
         int id = this.inputHandler.readPositiveInt("ID: ");
         try {
-            Content content = this.contentService.searchContent(id);
+            Content content = this.contentService.filterContentById(id);
             System.out.println(content);
         } catch (ContentNotExistException e) {
             System.out.println("O conteúdo com ID "+id+" não existe!");
+        }
+    }
+
+    private void searchByGenre() {
+        this.consoleMenu.showGenreOptions();
+        Genre genre = this.inputHandler.readGenre("Gênero: ");
+
+        List<Content> contents = this.contentService.filterContentsByGenre(genre);
+
+        if(contents.isEmpty()) {
+            System.out.println("Ainda não há conteúdo de "+genre.getName()+" cadastrado!");
+            return;
+        }
+
+        System.out.println("\n--- Conteúdos de "+genre.getName()+" ---");
+        for(Content content : contents) {
+            System.out.println(content);
         }
     }
 }

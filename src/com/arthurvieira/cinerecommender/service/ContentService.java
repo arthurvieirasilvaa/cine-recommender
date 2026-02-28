@@ -45,8 +45,12 @@ public class ContentService {
         this.contentRepository.deleteById(id);
     }
 
-    public Content searchContent(long id) {
+    public Content filterContentById(long id) {
         validateId(id);
         return this.contentRepository.findById(id);
+    }
+
+    public List<Content> filterContentsByGenre(Genre genre) {
+        return this.contentRepository.findByGenre(genre);
     }
 }

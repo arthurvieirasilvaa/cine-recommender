@@ -47,7 +47,7 @@ public class ConsoleMenu {
     }
 
     public void showGenreOptions() {
-        System.out.print("Opções de Gêneros:");
+        System.out.println("Opções de Gêneros:");
 
         int i = 1;
         for(Genre genre : Genre.values()) {

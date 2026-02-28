@@ -24,11 +24,9 @@ public class FileContentRepository implements ContentRepository {
     }
 
     private Map<Long, Content> loadFromFile() {
-        Map<Long, Content> fileContents = new LinkedHashMap<>();
+        ensureFileExists();
 
-        if(Files.notExists(this.path)) {
-            return fileContents;
-        }
+        Map<Long, Content> fileContents = new LinkedHashMap<>();
 
         try(FileReader fileReader = new FileReader(path.toFile());
             BufferedReader bufferedReader = new BufferedReader(fileReader)) {
@@ -43,6 +41,21 @@ public class FileContentRepository implements ContentRepository {
         }
 
         return fileContents;
+    }
+
+    private void ensureFileExists() {
+        try {
+            Path parentDirectory = this.path.getParent();
+            if(parentDirectory != null && Files.notExists(parentDirectory)) {
+                Files.createDirectories(parentDirectory);
+            }
+
+            if(Files.notExists(this.path)) {
+                Files.createFile(this.path);
+            }
+        } catch (IOException e) {
+            System.out.println("Ocorreu um erro ao preparar o arquivo de dados "+this.path.getFileName()+"!");
+        }
     }
 
     private Content parseLine(String line) {

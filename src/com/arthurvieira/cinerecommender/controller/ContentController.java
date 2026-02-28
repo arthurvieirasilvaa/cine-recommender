@@ -10,8 +10,6 @@ import com.arthurvieira.cinerecommender.ui.ConsoleMenu;
 import com.arthurvieira.cinerecommender.ui.InputHandler;
 import com.arthurvieira.cinerecommender.ui.MenuOptions;
 
-import java.io.Serial;
-import java.rmi.server.ExportException;
 import java.time.Duration;
 import java.time.Year;
 
@@ -27,9 +25,10 @@ public class ContentController {
     }
 
     public void start() {
+        boolean running = true;
         int option;
 
-        do {
+        while (running){
             this.consoleMenu.showContentMenu();
             option = this.inputHandler.readInt();
 
@@ -40,29 +39,34 @@ public class ContentController {
                 case 2:
                     this.registerSeries();
                     break;
+                case MenuOptions.BACK:
+                    running = false;
+                    break;
                 default:
                     System.out.println("Opção inválida!");
             }
-        } while (option != MenuOptions.EXIT);
+        }
     }
 
     private void registerMovie() {
         try {
-            System.out.println("Título: ");
+            System.out.print("Título: ");
             String title = this.inputHandler.readText();
 
-            System.out.println("Ano de lançamento: ");
+            System.out.print("Ano de lançamento: ");
             Year releaseYear = this.inputHandler.readYear();
 
             this.consoleMenu.showGenreOptions();
+            System.out.print("Opção: ");
             int option = this.inputHandler.readInt();
             Genre genre = Genre.fromOption(option);
 
             this.consoleMenu.showAgeRatingOptions();
+            System.out.print("Opção: ");
             option = this.inputHandler.readInt();
             AgeRating ageRating = AgeRating.fromOption(option);
 
-            System.out.println("Duração (em minutos): ");
+            System.out.print("Duração (em minutos): ");
             Duration duration = this.inputHandler.readDuration();
 
             Movie movie = this.contentService.createMovie(title, releaseYear, genre, ageRating, duration);
@@ -81,24 +85,26 @@ public class ContentController {
 
     private void registerSeries() {
         try {
-            System.out.println("Título: ");
+            System.out.print("Título: ");
             String title = this.inputHandler.readText();
 
-            System.out.println("Ano de lançamento: ");
+            System.out.print("Ano de lançamento: ");
             Year releaseYear = this.inputHandler.readYear();
 
             this.consoleMenu.showGenreOptions();
+            System.out.print("Opção: ");
             int option = this.inputHandler.readInt();
             Genre genre = Genre.fromOption(option);
 
             this.consoleMenu.showAgeRatingOptions();
+            System.out.print("Opção: ");
             option = this.inputHandler.readInt();
             AgeRating ageRating = AgeRating.fromOption(option);
 
-            System.out.println("Número de temporadas: ");
+            System.out.print("Número de temporadas: ");
             int numberOfSeasons = this.inputHandler.readInt();
 
-            System.out.println("Total de episódios: ");
+            System.out.print("Total de episódios: ");
             int totalEpisodes = this.inputHandler.readInt();
 
             Series series = this.contentService.createSeries(title, releaseYear, genre, ageRating, numberOfSeasons, totalEpisodes);

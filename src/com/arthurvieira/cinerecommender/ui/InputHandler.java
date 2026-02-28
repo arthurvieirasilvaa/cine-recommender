@@ -1,9 +1,5 @@
 package com.arthurvieira.cinerecommender.ui;
 
-import com.arthurvieira.cinerecommender.domain.Genre;
-
-import java.security.cert.TrustAnchor;
-import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.Year;
 import java.time.format.DateTimeParseException;

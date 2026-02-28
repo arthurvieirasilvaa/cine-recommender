@@ -18,9 +18,10 @@ public class ConsoleController {
     }
 
     public void start() {
+        boolean running = true;
         int option;
 
-        do {
+        while (running){
             this.consoleMenu.showMainMenu();
             option = this.inputHandler.readInt();
 
@@ -34,9 +35,12 @@ public class ConsoleController {
                 case 3:
                     // start UserController
                     break;
+                case MenuOptions.EXIT:
+                    running = false;
+                    break;
                 default:
                     System.out.println("Opção inválida!");
             }
-        } while (option != MenuOptions.EXIT);
+        }
     }
 }

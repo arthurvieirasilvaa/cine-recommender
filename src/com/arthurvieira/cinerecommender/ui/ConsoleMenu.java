@@ -11,7 +11,7 @@ public class ConsoleMenu {
         System.out.println("3 - Usuários");
         System.out.println("0 - Sair");
         System.out.println("------------------------------");
-        System.out.println("Digite uma opção: ");
+        System.out.print("Digite uma opção: ");
     }
 
     public void showContentMenu() {
@@ -25,7 +25,7 @@ public class ConsoleMenu {
         System.out.println("7 - Filtrar por Tipo");
         System.out.println("-1 - Voltar");
         System.out.println("------------------------------");
-        System.out.println("Digite uma opção: ");
+        System.out.print("Digite uma opção: ");
     }
 
     public void showRecommendationsMenu() {
@@ -35,7 +35,7 @@ public class ConsoleMenu {
         System.out.println("3 - Recomendar baseado em histórico do usuário");
         System.out.println("-1 - Voltar");
         System.out.println("------------------------------");
-        System.out.println("Digite uma opção: ");
+        System.out.print("Digite uma opção: ");
     }
 
     public void showUserMenu() {
@@ -47,11 +47,11 @@ public class ConsoleMenu {
         System.out.println("5 - Ver Histórico de Avaliações");
         System.out.println("-1 - Voltar");
         System.out.println("------------------------------");
-        System.out.println("Digite uma opção: ");
+        System.out.print("Digite uma opção: ");
     }
 
     public void showGenreOptions() {
-        System.out.println("Opções de Gêneros:");
+        System.out.print("Opções de Gêneros:");
 
         int i = 1;
         for(Genre genre : Genre.values()) {

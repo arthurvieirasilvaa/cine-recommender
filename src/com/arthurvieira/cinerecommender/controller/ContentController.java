@@ -42,6 +42,9 @@ public class ContentController {
                 case 4:
                     this.listContents();
                     break;
+                case 5:
+                    this.searchById();
+                    break;
                 case MenuOptions.BACK:
                     running = false;
                     break;
@@ -99,6 +102,16 @@ public class ContentController {
         System.out.println("\n--- Conteúdos Cadastrados: ---");
         for (Content content : contents) {
             System.out.println(content);
+        }
+    }
+
+    private void searchById() {
+        int id = this.inputHandler.readPositiveInt("ID: ");
+        try {
+            Content content = this.contentService.searchContent(id);
+            System.out.println(content);
+        } catch (ContentNotExistException e) {
+            System.out.println("O conteúdo com ID "+id+" não existe!");
         }
     }
 }

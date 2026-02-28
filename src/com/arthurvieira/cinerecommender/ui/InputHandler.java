@@ -1,6 +1,8 @@
 package com.arthurvieira.cinerecommender.ui;
 
 import com.arthurvieira.cinerecommender.domain.AgeRating;
+import com.arthurvieira.cinerecommender.domain.Content;
+import com.arthurvieira.cinerecommender.domain.ContentType;
 import com.arthurvieira.cinerecommender.domain.Genre;
 
 import java.time.Duration;
@@ -106,6 +108,19 @@ public class InputHandler {
             } catch (NumberFormatException e) {
                 System.out.println("Duração inválida! Informe a duração em minutos");
             }
+        }
+    }
+
+    public ContentType readContentType(String message) {
+        int option;
+        while (true) {
+            option = this.readInt(message);
+
+            if(option >= 1 && option <= ContentType.values().length) {
+                return ContentType.values()[option-1];
+            }
+
+            System.out.println("O tipo está inválido!");
         }
     }
 }

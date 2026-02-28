@@ -53,4 +53,8 @@ public class ContentService {
     public List<Content> filterContentsByGenre(Genre genre) {
         return this.contentRepository.findByGenre(genre);
     }
+
+    public List<Content> filterContentsByContentType(ContentType contentType) {
+        return this.contentRepository.findByType(contentType);
+    }
 }

@@ -48,6 +48,9 @@ public class ContentController {
                 case 6:
                     this.searchByGenre();
                     break;
+                case 7:
+                    this.searchByContentType();
+                    break;
                 case MenuOptions.BACK:
                     running = false;
                     break;
@@ -130,6 +133,23 @@ public class ContentController {
         }
 
         System.out.println("\n--- Conteúdos de "+genre.getName()+" ---");
+        for(Content content : contents) {
+            System.out.println(content);
+        }
+    }
+
+    private void searchByContentType() {
+        this.consoleMenu.showContentTypeOptions();
+        ContentType contentType = this.inputHandler.readContentType("Tipo: ");
+
+        List<Content> contents = this.contentService.filterContentsByContentType(contentType);
+
+        if(contents.isEmpty()) {
+            System.out.println("Ainda não há conteúdo do tipo "+contentType.getType()+" cadastrado!");
+            return;
+        }
+
+        System.out.println("\n--- Conteúdos do tipo "+contentType.getType()+" ---");
         for(Content content : contents) {
             System.out.println(content);
         }

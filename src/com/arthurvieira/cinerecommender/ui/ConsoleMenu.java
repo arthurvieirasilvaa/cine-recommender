@@ -1,6 +1,7 @@
 package com.arthurvieira.cinerecommender.ui;
 
 import com.arthurvieira.cinerecommender.domain.AgeRating;
+import com.arthurvieira.cinerecommender.domain.ContentType;
 import com.arthurvieira.cinerecommender.domain.Genre;
 
 public class ConsoleMenu {
@@ -22,6 +23,7 @@ public class ConsoleMenu {
         System.out.println("5 - Buscar por ID");
         System.out.println("6 - Filtrar por Gênero");
         System.out.println("7 - Filtrar por Tipo");
+        System.out.println("8 - Filtrar por Classificação Indicativa");
         System.out.println("-1 - Voltar");
         System.out.println("------------------------------");
     }
@@ -62,6 +64,16 @@ public class ConsoleMenu {
         int i = 1;
         for(AgeRating ageRating : AgeRating.values()) {
             System.out.println("\t"+i+" - "+ageRating.getDescription());
+            i++;
+        }
+    }
+
+    public void showContentTypeOptions() {
+        System.out.println("Opções de Tipos:");
+
+        int i = 1;
+        for(ContentType contentType : ContentType.values()) {
+            System.out.println("\t"+i+" - "+contentType.getType());
             i++;
         }
     }

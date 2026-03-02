@@ -1,5 +1,7 @@
 package com.arthurvieira.cinerecommender.domain;
 
+import com.arthurvieira.cinerecommender.exception.InvalidEmailException;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -13,12 +15,16 @@ public class User {
     LocalDate registrationDate;
     private final List<Rating> ratings;
 
+    private final String EMAIL_REGEX = "^([a-zA-Z0-9._-])+@([a-zA-Z])+(\\.([a-zA-Z])+)+$";
     private final String DATE_PATTERN = "dd-MMMM-yyyy";
 
     public User(long id, String name, String email) {
         this.id = id;
         this.name = name;
+
+        validateEmail(email);
         this.email = email;
+
         this.registrationDate = LocalDate.now();
         this.ratings = new ArrayList<>();
     }
@@ -44,6 +50,12 @@ public class User {
     @Override
     public int hashCode() {
         return Objects.hash(id, email);
+    }
+
+    public void validateEmail(String email) {
+        if(email == null || !email.matches(EMAIL_REGEX)) {
+            throw new InvalidEmailException("O email informado está inválido!");
+        }
     }
 
     public String formatDate() {

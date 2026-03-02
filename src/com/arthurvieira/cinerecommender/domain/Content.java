@@ -17,16 +17,12 @@ public abstract class Content {
     protected List<Rating> ratings;
 
     protected Content(long id, String title, Year releaseYear, Genre genre, AgeRating ageRating, ContentType contentType) {
-        this.title = title;
         this.id = id;
         this.title = title;
 
-        // Validate release year:
-        if(releaseYear.isAfter(Year.now())) {
-            throw new InvalidReleaseYearException("O ano de lançamento informado está inválido!");
-        }
-
+        validateReleaseYear(releaseYear);
         this.releaseYear = releaseYear;
+
         this.genre = genre;
         this.ageRating = ageRating;
         this.contentType = contentType;
@@ -45,6 +41,12 @@ public abstract class Content {
         return Objects.hashCode(id);
     }
 
+    private void validateReleaseYear(Year releaseYear) {
+        if(releaseYear.isAfter(Year.now())) {
+            throw new InvalidReleaseYearException("O ano de lançamento informado está inválido!");
+        }
+    }
+
     public void setId(long id) {
         this.id = id;
     }
@@ -57,40 +59,20 @@ public abstract class Content {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public Year getReleaseYear() {
         return releaseYear;
-    }
-
-    public void setReleaseYear(Year releaseYear) {
-        this.releaseYear = releaseYear;
     }
 
     public Genre getGenre() {
         return genre;
     }
 
-    public void setGenre(Genre genre) {
-        this.genre = genre;
-    }
-
     public AgeRating getAgeRating() {
         return ageRating;
     }
 
-    public void setAgeRating(AgeRating ageRating) {
-        this.ageRating = ageRating;
-    }
-
     public ContentType getContentType() {
         return contentType;
-    }
-
-    public void setContentType(ContentType contentType) {
-        this.contentType = contentType;
     }
 
     public List<Rating> getRatings() {

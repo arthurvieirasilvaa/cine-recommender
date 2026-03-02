@@ -73,7 +73,7 @@ public class InputHandler {
             option = this.readInt(message);
 
             if(option >= 1 && option <= Genre.values().length) {
-                return Genre.fromOption(option);
+                return Genre.values()[option-1];
             }
 
             System.out.println("O Gênero está inválido!");

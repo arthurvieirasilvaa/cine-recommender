@@ -51,6 +51,9 @@ public class ContentController {
                 case 7:
                     this.searchByContentType();
                     break;
+                case 8:
+                    this.searchByAgeRating();
+                    break;
                 case MenuOptions.BACK:
                     running = false;
                     break;
@@ -150,6 +153,23 @@ public class ContentController {
         }
 
         System.out.println("\n--- Conteúdos do tipo "+contentType.getType()+" ---");
+        for(Content content : contents) {
+            System.out.println(content);
+        }
+    }
+
+    private void searchByAgeRating() {
+        this.consoleMenu.showAgeRatingOptions();
+        AgeRating ageRating = this.inputHandler.readAgeRating("Classificação Indicativa: ");
+
+        List<Content> contents = this.contentService.filterContentsByAgeRating(ageRating);
+
+        if(contents.isEmpty()) {
+            System.out.println("Ainda não há conteúdo da classificação indicativa "+ageRating.getDescription()+" cadastrado!");
+            return;
+        }
+
+        System.out.println("\n--- Conteúdos da classificação indicativa "+ageRating.getDescription()+" ---");
         for(Content content : contents) {
             System.out.println(content);
         }

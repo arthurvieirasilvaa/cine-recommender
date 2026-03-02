@@ -57,4 +57,8 @@ public class ContentService {
     public List<Content> filterContentsByContentType(ContentType contentType) {
         return this.contentRepository.findByType(contentType);
     }
+
+    public List<Content> filterContentsByAgeRating(AgeRating ageRating) {
+        return this.contentRepository.findByAgeRating(ageRating);
+    }
 }

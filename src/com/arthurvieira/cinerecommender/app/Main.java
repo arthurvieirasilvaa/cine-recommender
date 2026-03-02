@@ -26,8 +26,8 @@ public class Main {
         ContentService contentService = new ContentService(contentRepository);
 
         // Controller:
-        ContentController contentController = new ContentController(new ConsoleMenu(), new InputHandler(), contentService);
-        ConsoleController consoleController = new ConsoleController(new ConsoleMenu(), new InputHandler(), contentController);
+        ContentController contentController = new ContentController(consoleMenu, inputHandler, contentService);
+        ConsoleController consoleController = new ConsoleController(consoleMenu, inputHandler, contentController);
         consoleController.start();
     }
 }

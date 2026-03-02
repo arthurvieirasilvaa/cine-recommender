@@ -1,22 +1,26 @@
 package com.arthurvieira.cinerecommender.domain;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 public class User {
-    private final long id;
+    private long id;
     private String name;
     private final String email;
     LocalDate registrationDate;
-    private List<Rating> ratings;
+    private final List<Rating> ratings;
 
-    public User(long id, String name, String email, LocalDate registrationDate, List<Rating> ratings) {
+    private final String DATE_PATTERN = "dd-MMMM-yyyy";
+
+    public User(long id, String name, String email) {
         this.id = id;
         this.name = name;
         this.email = email;
-        this.registrationDate = registrationDate;
-        this.ratings = ratings;
+        this.registrationDate = LocalDate.now();
+        this.ratings = new ArrayList<>();
     }
 
     @Override
@@ -42,8 +46,17 @@ public class User {
         return Objects.hash(id, email);
     }
 
+    public String formatDate() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_PATTERN);
+        return this.registrationDate.format(formatter);
+    }
+
     public long getId() {
         return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -60,10 +73,6 @@ public class User {
 
     public LocalDate getRegistrationDate() {
         return registrationDate;
-    }
-
-    public void setRegistrationDate(LocalDate registrationDate) {
-        this.registrationDate = registrationDate;
     }
 
     public List<Rating> getRatings() {

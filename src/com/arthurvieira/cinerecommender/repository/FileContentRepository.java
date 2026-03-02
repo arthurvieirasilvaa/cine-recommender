@@ -28,7 +28,7 @@ public class FileContentRepository implements ContentRepository {
 
         Map<Long, Content> fileContents = new LinkedHashMap<>();
 
-        try(FileReader fileReader = new FileReader(path.toFile());
+        try(FileReader fileReader = new FileReader(this.path.toFile());
             BufferedReader bufferedReader = new BufferedReader(fileReader)) {
             String line;
 
@@ -59,25 +59,25 @@ public class FileContentRepository implements ContentRepository {
     }
 
     private Content parseLine(String line) {
-        String[] contentfields = line.split(";");
+        String[] contentFields = line.split(";");
 
         // Getting the fields of the current content:
-        long id = Long.parseLong(contentfields[0]);
-        ContentType type = ContentType.fromType(contentfields[1]);
-        String title = contentfields[2];
-        Year year = Year.parse(contentfields[3]);
-        Genre genre = Genre.valueOf(contentfields[4]);
-        AgeRating ageRating = AgeRating.valueOf(contentfields[5]);
+        long id = Long.parseLong(contentFields[0]);
+        ContentType type = ContentType.fromType(contentFields[1]);
+        String title = contentFields[2];
+        Year year = Year.parse(contentFields[3]);
+        Genre genre = Genre.valueOf(contentFields[4]);
+        AgeRating ageRating = AgeRating.valueOf(contentFields[5]);
 
         if(type == ContentType.MOVIE) {
-            Duration duration = Duration.ofMinutes(Long.parseLong(contentfields[6]));
+            Duration duration = Duration.ofMinutes(Long.parseLong(contentFields[6]));
 
             return new Movie(id, title, year, genre, ageRating, duration);
         }
 
         if(type == ContentType.SERIES) {
-            int numberOfSeasons = Integer.parseInt(contentfields[6]);
-            int totalEpisodes = Integer.parseInt(contentfields[7]);
+            int numberOfSeasons = Integer.parseInt(contentFields[6]);
+            int totalEpisodes = Integer.parseInt(contentFields[7]);
 
             return new Series(id, title, year, genre, ageRating, numberOfSeasons, totalEpisodes);
         }
@@ -111,14 +111,14 @@ public class FileContentRepository implements ContentRepository {
     }
 
     private void writeAllToFile() {
-        try(FileWriter fileWriter = new FileWriter(path.toFile());
+        try(FileWriter fileWriter = new FileWriter(this.path.toFile());
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter)) {
             for(Content content : this.contents.values()) {
                 bufferedWriter.write(convertContentToFileLine(content));
                 bufferedWriter.newLine();
             }
         } catch (IOException e) {
-            System.out.println("Ocorreu um erro ao salvar os dados no arquivo " + path.getFileName());
+            System.out.println("Ocorreu um erro ao salvar os dados no arquivo " + this.path.getFileName());
         }
     }
 

@@ -1,64 +1,22 @@
 package com.arthurvieira.cinerecommender.repository;
 
 import com.arthurvieira.cinerecommender.domain.*;
-import com.arthurvieira.cinerecommender.exception.ContentNotExistException;
 import com.arthurvieira.cinerecommender.exception.InvalidContentException;
 import com.arthurvieira.cinerecommender.exception.InvalidContentTypeException;
 
 import java.io.*;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
 import java.time.Year;
 import java.util.*;
 
-public class FileContentRepository implements ContentRepository {
-    private final Path path;
-    private final Map<Long, Content> contents;
-    private long nextId;
-
+public class FileContentRepository extends FileRepository<Content> implements ContentRepository {
     public FileContentRepository(Path path) {
-        this.path = path;
-        this.contents = loadFromFile();
-        this.nextId = generateNextId();
+        super(path);
     }
 
-    private Map<Long, Content> loadFromFile() {
-        ensureFileExists();
-
-        Map<Long, Content> fileContents = new LinkedHashMap<>();
-
-        try(FileReader fileReader = new FileReader(this.path.toFile());
-            BufferedReader bufferedReader = new BufferedReader(fileReader)) {
-            String line;
-
-            while ((line = bufferedReader.readLine()) != null) {
-                Content content = parseLine(line);
-                fileContents.put(content.getId(), content);
-            }
-        } catch (IOException e) {
-            System.out.println("Ocorreu um erro ao carregar os dados do arquivo "+path.getFileName());
-        }
-
-        return fileContents;
-    }
-
-    private void ensureFileExists() {
-        try {
-            Path parentDirectory = this.path.getParent();
-            if(parentDirectory != null && Files.notExists(parentDirectory)) {
-                Files.createDirectories(parentDirectory);
-            }
-
-            if(Files.notExists(this.path)) {
-                Files.createFile(this.path);
-            }
-        } catch (IOException e) {
-            System.out.println("Ocorreu um erro ao preparar o arquivo de dados "+this.path.getFileName()+"!");
-        }
-    }
-
-    private Content parseLine(String line) {
+    @Override
+    protected Content parseLine(String line) {
         String[] contentFields = line.split(";");
 
         // Getting the fields of the current content:
@@ -85,7 +43,8 @@ public class FileContentRepository implements ContentRepository {
         throw new InvalidContentTypeException("O tipo do conteúdo "+type+" é inválido!");
     }
 
-    private String convertContentToFileLine(Content content) {
+    @Override
+    protected String convertObjectToFileLine(Content content) {
         if(content instanceof Movie) {
             return content.getId() + ";" +
                     ContentType.MOVIE.getType() + ";" +
@@ -110,72 +69,11 @@ public class FileContentRepository implements ContentRepository {
         throw new InvalidContentException("A obra precisa ser um filme ou uma série!");
     }
 
-    private void writeAllToFile() {
-        try(FileWriter fileWriter = new FileWriter(this.path.toFile());
-            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter)) {
-            for(Content content : this.contents.values()) {
-                bufferedWriter.write(convertContentToFileLine(content));
-                bufferedWriter.newLine();
-            }
-        } catch (IOException e) {
-            System.out.println("Ocorreu um erro ao salvar os dados no arquivo " + this.path.getFileName());
-        }
-    }
-
-    @Override
-    public Content save(Content content) {
-        // Checks if the content is the first to be written in the file:
-        if(content.getId() == 0) {
-            content.setId(this.nextId++);
-        }
-
-        this.contents.put(content.getId(), content);
-        writeAllToFile();
-
-        return content;
-    }
-
-    @Override
-    public void deleteById(long id) {
-        if(this.contents.remove(id) == null) {
-            throw new ContentNotExistException("A obra de ID "+id+"não existe!");
-        }
-
-        writeAllToFile();
-    }
-
-    public long generateNextId() {
-        long maxId = 0;
-        for(Long id : this.contents.keySet()) {
-            if(id > maxId) {
-                maxId = id;
-            }
-        }
-
-        return maxId+1;
-    }
-
-    @Override
-    public Content findById(long id) {
-        Content content = this.contents.get(id);
-
-        if(content != null) {
-            return content;
-        }
-
-        throw new ContentNotExistException("A obra de ID "+id+"não existe!");
-    }
-
-    @Override
-    public List<Content> listAll() {
-        return new ArrayList<>(this.contents.values());
-    }
-
     @Override
     public List<Content> findByGenre(Genre genre) {
         List<Content> contentsFiltered = new ArrayList<>();
 
-        for(Content content : this.contents.values()) {
+        for(Content content : this.objects.values()) {
             if(content.getGenre() == genre) {
                 contentsFiltered.add(content);
             }
@@ -188,7 +86,7 @@ public class FileContentRepository implements ContentRepository {
     public List<Content> findByType(ContentType contentType) {
         List<Content> contentsFiltered = new ArrayList<>();
 
-        for(Content content : this.contents.values()) {
+        for(Content content : this.objects.values()) {
             if(content.getContentType() == contentType) {
                 contentsFiltered.add(content);
             }
@@ -201,12 +99,22 @@ public class FileContentRepository implements ContentRepository {
     public List<Content> findByAgeRating(AgeRating ageRating) {
         List<Content> contentsFiltered = new ArrayList<>();
 
-        for(Content content : this.contents.values()) {
+        for(Content content : this.objects.values()) {
             if(content.getAgeRating() == ageRating) {
                 contentsFiltered.add(content);
             }
         }
 
         return contentsFiltered;
+    }
+
+    @Override
+    protected long getObjectId(Content content) {
+        return content.getId();
+    }
+
+    @Override
+    protected void setObjectId(Content content, long id) {
+        content.setId(id);
     }
 }

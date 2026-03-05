@@ -1,7 +1,6 @@
 package com.arthurvieira.cinerecommender.ui;
 
 import com.arthurvieira.cinerecommender.domain.AgeRating;
-import com.arthurvieira.cinerecommender.domain.Content;
 import com.arthurvieira.cinerecommender.domain.ContentType;
 import com.arthurvieira.cinerecommender.domain.Genre;
 

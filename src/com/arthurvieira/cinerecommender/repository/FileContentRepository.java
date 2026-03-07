@@ -17,30 +17,39 @@ public class FileContentRepository extends FileRepository<Content> implements Co
 
     @Override
     protected Content parseLine(String line) {
-        String[] contentFields = line.split(";");
+        try {
+            String[] contentFields = line.split(";");
 
-        // Getting the fields of the current content:
-        long id = Long.parseLong(contentFields[0]);
-        ContentType type = ContentType.fromType(contentFields[1]);
-        String title = contentFields[2];
-        Year year = Year.parse(contentFields[3]);
-        Genre genre = Genre.valueOf(contentFields[4]);
-        AgeRating ageRating = AgeRating.valueOf(contentFields[5]);
+            if(contentFields.length < 6 || contentFields.length > 8) {
+                throw new IllegalArgumentException("A linha do arquivo de conteúdos está inválida!");
+            }
 
-        if(type == ContentType.MOVIE) {
-            Duration duration = Duration.ofMinutes(Long.parseLong(contentFields[6]));
+            // Getting the fields of the current content:
+            long id = Long.parseLong(contentFields[0]);
+            ContentType type = ContentType.fromType(contentFields[1]);
+            String title = contentFields[2];
+            Year year = Year.parse(contentFields[3]);
+            Genre genre = Genre.valueOf(contentFields[4]);
+            AgeRating ageRating = AgeRating.valueOf(contentFields[5]);
 
-            return new Movie(id, title, year, genre, ageRating, duration);
+            if(type == ContentType.MOVIE) {
+                Duration duration = Duration.ofMinutes(Long.parseLong(contentFields[6]));
+
+                return new Movie(id, title, year, genre, ageRating, duration);
+            }
+
+            if(type == ContentType.SERIES) {
+                int numberOfSeasons = Integer.parseInt(contentFields[6]);
+                int totalEpisodes = Integer.parseInt(contentFields[7]);
+
+                return new Series(id, title, year, genre, ageRating, numberOfSeasons, totalEpisodes);
+            }
+
+            throw new InvalidContentTypeException("O tipo do conteúdo "+type+" é inválido!");
+        } catch (Exception e) {
+            System.out.println("Ocorreu ao processar a linha: "+line);
+            return null;
         }
-
-        if(type == ContentType.SERIES) {
-            int numberOfSeasons = Integer.parseInt(contentFields[6]);
-            int totalEpisodes = Integer.parseInt(contentFields[7]);
-
-            return new Series(id, title, year, genre, ageRating, numberOfSeasons, totalEpisodes);
-        }
-
-        throw new InvalidContentTypeException("O tipo do conteúdo "+type+" é inválido!");
     }
 
     @Override

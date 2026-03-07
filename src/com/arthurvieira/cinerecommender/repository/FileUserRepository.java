@@ -3,6 +3,7 @@ package com.arthurvieira.cinerecommender.repository;
 import com.arthurvieira.cinerecommender.domain.User;
 
 import java.nio.file.Path;
+import java.time.LocalDate;
 
 public class FileUserRepository extends FileRepository<User> implements UserRepository {
     public FileUserRepository(Path path) {
@@ -11,14 +12,24 @@ public class FileUserRepository extends FileRepository<User> implements UserRepo
 
     @Override
     protected User parseLine(String line) {
-        String[] fileFields = line.split(";");
+        try {
+            String[] userFields = line.split(";");
 
-        // Getting the fields of the current user:
-        long id = Long.parseLong(fileFields[0]);
-        String name = fileFields[1];
-        String email = fileFields[2];
+            if(userFields.length != 4) {
+                throw new IllegalArgumentException("A linha do arquivo de usuários está inválida!");
+            }
 
-        return new User(id, name, email);
+            // Getting the fields of the current user:
+            long id = Long.parseLong(userFields[0]);
+            String name = userFields[1];
+            String email = userFields[2];
+            LocalDate registrationDate = LocalDate.parse(userFields[3]);
+
+            return new User(id, name, email, registrationDate);
+        } catch (Exception e) {
+            System.out.println("Ocorreu ao processar a linha: "+line);
+            return null;
+        }
     }
 
     @Override
@@ -26,7 +37,7 @@ public class FileUserRepository extends FileRepository<User> implements UserRepo
         return user.getId() + ";" +
                 user.getName() + ";" +
                 user.getEmail() + ";" +
-                user.formatDate();
+                user.getRegistrationDate();
     }
 
     @Override

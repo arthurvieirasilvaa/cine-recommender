@@ -46,12 +46,15 @@ public class ContentController {
                     this.searchById();
                     break;
                 case 6:
-                    this.searchByGenre();
+                    this.delete();
                     break;
                 case 7:
-                    this.searchByContentType();
+                    this.searchByGenre();
                     break;
                 case 8:
+                    this.searchByContentType();
+                    break;
+                case 9:
                     this.searchByAgeRating();
                     break;
                 case MenuOptions.BACK:
@@ -119,7 +122,21 @@ public class ContentController {
         try {
             Content content = this.contentService.filterContentById(id);
             System.out.println(content);
-        } catch (ContentNotExistException e) {
+        } catch (InvalidIdException e) {
+            System.out.println("O ID informado está inválido!");
+        } catch (ObjectNotExistException e) {
+            System.out.println("O conteúdo com ID "+id+" não existe!");
+        }
+    }
+
+    private void delete() {
+        int id = this.inputHandler.readPositiveInt("ID: ");
+        try {
+            Content content = this.contentService.deleteContent(id);
+            System.out.println("O conteúdo "+content.getTitle()+" com ID "+content.getId()+" foi removido com sucesso!");
+        } catch (InvalidIdException e) {
+            System.out.println("O ID informado está inválido!");
+        } catch (ObjectNotExistException e) {
             System.out.println("O conteúdo com ID "+id+" não existe!");
         }
     }

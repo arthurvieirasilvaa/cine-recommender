@@ -86,12 +86,15 @@ public abstract class FileRepository<T> implements CrudRepository<T> {
         return object;
     }
 
-    public void deleteById(long id) {
-        if(this.objects.remove(id) == null) {
-            throw new ObjectNotExistException("O object de ID "+id+" não existe!");
+    public T deleteById(long id) {
+        T object = this.objects.remove(id);
+
+        if(object != null) {
+            writeAllToFile();
+            return object;
         }
 
-        writeAllToFile();
+        throw new ObjectNotExistException("O object de ID "+id+" não existe!");
     }
 
     public T findById(long id) {

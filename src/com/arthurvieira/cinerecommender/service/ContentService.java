@@ -40,14 +40,14 @@ public class ContentService {
         return this.contentRepository.listAll();
     }
 
-    public void deleteContent(long id) {
-        validateId(id);
-        this.contentRepository.deleteById(id);
-    }
-
     public Content filterContentById(long id) {
         validateId(id);
         return this.contentRepository.findById(id);
+    }
+
+    public Content deleteContent(long id) {
+        validateId(id);
+        return this.contentRepository.deleteById(id);
     }
 
     public List<Content> filterContentsByGenre(Genre genre) {

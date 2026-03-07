@@ -21,9 +21,10 @@ public class ConsoleMenu {
         System.out.println("3 - Avaliar conteúdo");
         System.out.println("4 - Listar Todos");
         System.out.println("5 - Buscar por ID");
-        System.out.println("6 - Filtrar por Gênero");
-        System.out.println("7 - Filtrar por Tipo");
-        System.out.println("8 - Filtrar por Classificação Indicativa");
+        System.out.println("6 - Remover conteúdo");
+        System.out.println("7 - Filtrar por Gênero");
+        System.out.println("8 - Filtrar por Tipo");
+        System.out.println("9 - Filtrar por Classificação Indicativa");
         System.out.println("-1 - Voltar");
         System.out.println("------------------------------");
     }

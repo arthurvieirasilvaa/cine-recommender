@@ -1,6 +1,6 @@
 package com.arthurvieira.cinerecommender.domain;
 
-import com.arthurvieira.cinerecommender.exception.InvalidDurationException;
+import com.arthurvieira.cinerecommender.util.ValidationUtils;
 
 import java.time.Duration;
 import java.time.Year;
@@ -11,11 +11,7 @@ public class Movie extends Content {
     public Movie(long id, String title, Year releaseYear, Genre genre, AgeRating ageRating, Duration duration) {
         super(id, title, releaseYear, genre, ageRating, ContentType.MOVIE);
 
-        // Validate duration:
-        if(duration.isNegative() || duration.isZero()) {
-            throw new InvalidDurationException("A duração do filme deve ser positiva!");
-        }
-
+        ValidationUtils.validateMovieDuration(duration);
         this.duration = duration;
     }
 

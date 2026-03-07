@@ -1,38 +1,31 @@
 package com.arthurvieira.cinerecommender.domain;
 
+import com.arthurvieira.cinerecommender.util.ValidationUtils;
+
 import java.util.Objects;
 
 public class Rating {
-    private static final int MIN_STARS = 0;
-    private static final int MAX_STARS = 5;
-
-    private final long userId;
-    private final long contentId;
+    private final User user;
+    private final Content content;
     private int stars;
 
-    public Rating(long userId, long contentId, int stars) {
-        validadeStars(stars);
-        this.userId = userId;
-        this.contentId = contentId;
+    public Rating(User user, Content content, int stars) {
+        ValidationUtils.validadeStars(stars);
+        this.user = Objects.requireNonNull(user, "O usuário não pode ser nulo");
+        this.content = Objects.requireNonNull(content, "O conteúdo não pode ser nulo!");
         this.stars = stars;
     }
 
-    private void validadeStars(int stars) {
-        if(stars < MIN_STARS || stars > MAX_STARS) {
-            throw new IllegalArgumentException("The stars must betwenn "+MIN_STARS+" and "+MAX_STARS);
-        }
-    }
-
     public void updateStars(int stars) {
-        validadeStars(stars);
+        ValidationUtils.validadeStars(stars);
         this.stars = stars;
     }
 
     @Override
     public String toString() {
         return "Rating{" +
-                "userId=" + userId +
-                ", contentId=" + contentId +
+                "userId=" + user.getId() +
+                ", contentId=" + content.getId() +
                 ", stars=" + stars +
                 '}';
     }
@@ -41,20 +34,20 @@ public class Rating {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Rating rating = (Rating) o;
-        return userId == rating.userId && contentId == rating.contentId;
+        return Objects.equals(user, rating.user) && Objects.equals(content, rating.content);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userId, contentId);
+        return Objects.hash(user, content);
     }
 
-    public long getUserId() {
-        return userId;
+    public User getUser() {
+        return user;
     }
 
-    public long getContentId() {
-        return contentId;
+    public Content getContent() {
+        return content;
     }
 
     public int getStars() {

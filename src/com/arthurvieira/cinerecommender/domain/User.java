@@ -1,6 +1,6 @@
 package com.arthurvieira.cinerecommender.domain;
 
-import com.arthurvieira.cinerecommender.exception.InvalidEmailException;
+import com.arthurvieira.cinerecommender.util.ValidationUtils;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -12,21 +12,22 @@ public class User {
     private long id;
     private String name;
     private final String email;
-    LocalDate registrationDate;
+    private final LocalDate registrationDate;
     private final List<Rating> ratings;
 
-    private final String EMAIL_REGEX = "^([a-zA-Z0-9._-])+@([a-zA-Z])+(\\.([a-zA-Z])+)+$";
-    private final String DATE_PATTERN = "dd-MMMM-yyyy";
-
-    public User(long id, String name, String email) {
+    public User(long id, String name, String email, LocalDate registrationDate) {
         this.id = id;
         this.name = name;
 
-        validateEmail(email);
+        ValidationUtils.validateEmail(email);
         this.email = email;
 
-        this.registrationDate = LocalDate.now();
+        this.registrationDate = registrationDate;
         this.ratings = new ArrayList<>();
+    }
+
+    public User(long id, String name, String email) {
+        this(id, name, email, LocalDate.now());
     }
 
     @Override
@@ -52,13 +53,8 @@ public class User {
         return Objects.hash(id, email);
     }
 
-    public void validateEmail(String email) {
-        if(email == null || !email.matches(EMAIL_REGEX)) {
-            throw new InvalidEmailException("O email informado está inválido!");
-        }
-    }
-
     public String formatDate() {
+        String DATE_PATTERN = "dd-MMMM-yyyy";
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_PATTERN);
         return this.registrationDate.format(formatter);
     }

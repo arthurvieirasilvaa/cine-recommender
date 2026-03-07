@@ -1,6 +1,6 @@
 package com.arthurvieira.cinerecommender.domain;
 
-import com.arthurvieira.cinerecommender.exception.InvalidReleaseYearException;
+import com.arthurvieira.cinerecommender.util.ValidationUtils;
 
 import java.time.Year;
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ public abstract class Content {
         this.id = id;
         this.title = title;
 
-        validateReleaseYear(releaseYear);
+        ValidationUtils.validateReleaseYear(releaseYear);
         this.releaseYear = releaseYear;
 
         this.genre = genre;
@@ -39,12 +39,6 @@ public abstract class Content {
     @Override
     public int hashCode() {
         return Objects.hashCode(id);
-    }
-
-    private void validateReleaseYear(Year releaseYear) {
-        if(releaseYear.isAfter(Year.now())) {
-            throw new InvalidReleaseYearException("O ano de lançamento informado está inválido!");
-        }
     }
 
     public void setId(long id) {

@@ -8,13 +8,16 @@ public class ConsoleController {
     private final ConsoleMenu consoleMenu;
     private final InputHandler inputHandler;
     private final ContentController contentController;
+    private final UserController userController;
 
     public ConsoleController(ConsoleMenu consoleMenu,
                              InputHandler inputHandler,
-                             ContentController contentController) {
+                             ContentController contentController,
+                             UserController userController) {
         this.consoleMenu = consoleMenu;
         this.inputHandler = inputHandler;
         this.contentController = contentController;
+        this.userController = userController;
     }
 
     public void start() {
@@ -33,7 +36,7 @@ public class ConsoleController {
                     this.consoleMenu.showRecommendationsMenu();
                     break;
                 case 3:
-                    // start UserController
+                    this.userController.start();
                     break;
                 case MenuOptions.EXIT:
                     running = false;

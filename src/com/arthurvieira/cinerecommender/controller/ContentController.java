@@ -71,10 +71,10 @@ public class ContentController {
         Year releaseYear = this.inputHandler.readYear("Ano de lançamento: ");
 
         this.consoleMenu.showGenreOptions();
-        Genre genre = this.inputHandler.readGenre("Opção do Gênero: ");
+        Genre genre = this.inputHandler.readEnum("Opção do Gênero: ", Genre.values());
 
         this.consoleMenu.showAgeRatingOptions();
-        AgeRating ageRating = this.inputHandler.readAgeRating("Opção da Classificação Indicativa: ");
+        AgeRating ageRating = this.inputHandler.readEnum("Opção da Classificação Indicativa: ", AgeRating.values());
 
         Duration duration = this.inputHandler.readDuration("Duração (em minutos): ");
 
@@ -89,10 +89,10 @@ public class ContentController {
         Year releaseYear = this.inputHandler.readYear("Ano de lançamento: ");
 
         this.consoleMenu.showGenreOptions();
-        Genre genre = this.inputHandler.readGenre("Opção do Gênero: ");
+        Genre genre = this.inputHandler.readEnum("Opção do Gênero: ", Genre.values());
 
         this.consoleMenu.showAgeRatingOptions();
-        AgeRating ageRating = this.inputHandler.readAgeRating("Opção da Classificação Indicativa: ");
+        AgeRating ageRating = this.inputHandler.readEnum("Opção da Classificação Indicativa: ", AgeRating.values());
 
         int numberOfSeasons = this.inputHandler.readPositiveInt("Número de temporadas: ");
         int totalEpisodes = this.inputHandler.readPositiveInt("Total de episódios: ");
@@ -141,54 +141,41 @@ public class ContentController {
         }
     }
 
-    private void searchByGenre() {
-        this.consoleMenu.showGenreOptions();
-        Genre genre = this.inputHandler.readGenre("Gênero: ");
-
-        List<Content> contents = this.contentService.filterContentsByGenre(genre);
-
+    private void displayResults(List<Content> contents, String emptyMessage) {
         if(contents.isEmpty()) {
-            System.out.println("Ainda não há conteúdo de "+genre.getName()+" cadastrado!");
+            System.out.println(emptyMessage);
             return;
         }
 
-        System.out.println("\n--- Conteúdos de "+genre.getName()+" ---");
+        System.out.println("\n---"+contents.size()+" Resultados encontrados "+"---");
         for(Content content : contents) {
             System.out.println(content);
         }
+    }
+
+    private void searchByGenre() {
+        this.consoleMenu.showGenreOptions();
+        Genre genre = this.inputHandler.readEnum("Gênero: ", Genre.values());
+
+        List<Content> contents = this.contentService.filterContentsByGenre(genre);
+        displayResults(contents, "Ainda não há conteúdo de "+genre.getName()+" cadastrado!");
     }
 
     private void searchByContentType() {
         this.consoleMenu.showContentTypeOptions();
-        ContentType contentType = this.inputHandler.readContentType("Tipo: ");
+        ContentType contentType = this.inputHandler.readEnum("Tipo: ", ContentType.values());
 
         List<Content> contents = this.contentService.filterContentsByContentType(contentType);
 
-        if(contents.isEmpty()) {
-            System.out.println("Ainda não há conteúdo do tipo "+contentType.getType()+" cadastrado!");
-            return;
-        }
-
-        System.out.println("\n--- Conteúdos do tipo "+contentType.getType()+" ---");
-        for(Content content : contents) {
-            System.out.println(content);
-        }
+        displayResults(contents, "Ainda não há conteúdo do tipo "+contentType.getType()+" cadastrado!");
     }
 
     private void searchByAgeRating() {
         this.consoleMenu.showAgeRatingOptions();
-        AgeRating ageRating = this.inputHandler.readAgeRating("Classificação Indicativa: ");
+        AgeRating ageRating = this.inputHandler.readEnum("Classificação Indicativa: ", AgeRating.values());
 
         List<Content> contents = this.contentService.filterContentsByAgeRating(ageRating);
 
-        if(contents.isEmpty()) {
-            System.out.println("Ainda não há conteúdo da classificação indicativa "+ageRating.getDescription()+" cadastrado!");
-            return;
-        }
-
-        System.out.println("\n--- Conteúdos da classificação indicativa "+ageRating.getDescription()+" ---");
-        for(Content content : contents) {
-            System.out.println(content);
-        }
+        displayResults(contents, "Ainda não há conteúdo da classificação indicativa "+ageRating.getDescription()+" cadastrado!");
     }
 }

@@ -1,8 +1,7 @@
 package com.arthurvieira.cinerecommender.ui;
 
-import com.arthurvieira.cinerecommender.domain.AgeRating;
-import com.arthurvieira.cinerecommender.domain.ContentType;
-import com.arthurvieira.cinerecommender.domain.Genre;
+import com.arthurvieira.cinerecommender.exception.InvalidEmailException;
+import com.arthurvieira.cinerecommender.util.ValidationUtils;
 
 import java.time.Duration;
 import java.time.Year;
@@ -66,29 +65,16 @@ public class InputHandler {
         }
     }
 
-    public Genre readGenre(String message) {
+    public <T extends Enum<T>> T readEnum(String message, T[] values) {
         int option;
         while (true) {
             option = this.readInt(message);
 
-            if(option >= 1 && option <= Genre.values().length) {
-                return Genre.values()[option-1];
+            if(option >= 1 && option <= values.length) {
+                return values[option-1];
             }
 
-            System.out.println("O Gênero está inválido!");
-        }
-    }
-
-    public AgeRating readAgeRating(String message) {
-        int option;
-        while (true) {
-            option = this.readInt(message);
-
-            if(option >= 1 && option <= AgeRating.values().length) {
-                return AgeRating.values()[option-1];
-            }
-
-            System.out.println("A classificação indicativa está inválida!");
+            System.out.println("Selecione uma opção válida entre 1 e "+values.length);
         }
     }
 
@@ -110,16 +96,19 @@ public class InputHandler {
         }
     }
 
-    public ContentType readContentType(String message) {
-        int option;
+    public String readEmail(String message) {
         while (true) {
-            option = this.readInt(message);
-
-            if(option >= 1 && option <= ContentType.values().length) {
-                return ContentType.values()[option-1];
+            try {
+                String email = this.readText(message);
+                ValidationUtils.validateEmail(email);
+                return email;
+            } catch (InvalidEmailException e) {
+                System.out.println("O email informado está inválido!");
             }
-
-            System.out.println("O tipo está inválido!");
         }
+    }
+
+    public void closeScanner() {
+        this.scanner.close();
     }
 }

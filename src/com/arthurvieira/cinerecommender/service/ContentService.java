@@ -1,8 +1,8 @@
 package com.arthurvieira.cinerecommender.service;
 
 import com.arthurvieira.cinerecommender.domain.*;
-import com.arthurvieira.cinerecommender.exception.InvalidIdException;
 import com.arthurvieira.cinerecommender.repository.ContentRepository;
+import com.arthurvieira.cinerecommender.util.ValidationUtils;
 
 import java.time.Duration;
 import java.time.Year;
@@ -13,12 +13,6 @@ public class ContentService {
 
     public ContentService(ContentRepository contentRepository) {
         this.contentRepository = contentRepository;
-    }
-
-    private void validateId(long id) {
-        if(id <= 0) {
-            throw new InvalidIdException("O ID do conteúdo deve ser positivo!");
-        }
     }
 
     public Movie createMovie(String title, Year releaseYear, Genre genre,
@@ -41,12 +35,12 @@ public class ContentService {
     }
 
     public Content filterContentById(long id) {
-        validateId(id);
+        ValidationUtils.validateId(id);
         return this.contentRepository.findById(id);
     }
 
     public Content deleteContent(long id) {
-        validateId(id);
+        ValidationUtils.validateId(id);
         return this.contentRepository.deleteById(id);
     }
 

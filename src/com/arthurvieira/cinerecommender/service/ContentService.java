@@ -45,14 +45,14 @@ public class ContentService {
     }
 
     public List<Content> filterContentsByGenre(Genre genre) {
-        return this.contentRepository.findByGenre(genre);
+        return this.contentRepository.filter(content -> content.getGenre() == genre);
     }
 
     public List<Content> filterContentsByContentType(ContentType contentType) {
-        return this.contentRepository.findByType(contentType);
+        return this.contentRepository.filter(content -> content.getContentType() == contentType);
     }
 
     public List<Content> filterContentsByAgeRating(AgeRating ageRating) {
-        return this.contentRepository.findByAgeRating(ageRating);
+        return this.contentRepository.filter(content -> content.getAgeRating() == ageRating);
     }
 }

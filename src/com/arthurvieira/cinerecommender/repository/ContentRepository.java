@@ -1,14 +1,6 @@
 package com.arthurvieira.cinerecommender.repository;
 
-import com.arthurvieira.cinerecommender.domain.AgeRating;
 import com.arthurvieira.cinerecommender.domain.Content;
-import com.arthurvieira.cinerecommender.domain.ContentType;
-import com.arthurvieira.cinerecommender.domain.Genre;
-
-import java.util.List;
 
 public interface ContentRepository extends CrudRepository<Content> {
-    List<Content> findByGenre(Genre genre);
-    List<Content> findByType(ContentType contentType);
-    List<Content> findByAgeRating(AgeRating ageRating);
 }

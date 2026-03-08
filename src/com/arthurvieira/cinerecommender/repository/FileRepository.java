@@ -1,5 +1,6 @@
 package com.arthurvieira.cinerecommender.repository;
 
+import com.arthurvieira.cinerecommender.domain.Content;
 import com.arthurvieira.cinerecommender.exception.ObjectNotExistException;
 
 import java.io.*;
@@ -9,6 +10,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 
 public abstract class FileRepository<T> implements CrudRepository<T> {
     protected final Path path;
@@ -109,6 +111,18 @@ public abstract class FileRepository<T> implements CrudRepository<T> {
 
     public List<T> listAll() {
         return new ArrayList<>(this.objects.values());
+    }
+
+    public List<T> filter(Predicate<T> predicate) {
+        List<T> objectsFiltered = new ArrayList<>();
+
+        for(T object : this.objects.values()) {
+            if(predicate.test(object)) {
+                objectsFiltered.add(object);
+            }
+        }
+
+        return objectsFiltered;
     }
 
     protected long generateNextId() {

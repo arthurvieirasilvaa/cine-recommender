@@ -79,45 +79,6 @@ public class FileContentRepository extends FileRepository<Content> implements Co
     }
 
     @Override
-    public List<Content> findByGenre(Genre genre) {
-        List<Content> contentsFiltered = new ArrayList<>();
-
-        for(Content content : this.objects.values()) {
-            if(content.getGenre() == genre) {
-                contentsFiltered.add(content);
-            }
-        }
-
-        return contentsFiltered;
-    }
-
-    @Override
-    public List<Content> findByType(ContentType contentType) {
-        List<Content> contentsFiltered = new ArrayList<>();
-
-        for(Content content : this.objects.values()) {
-            if(content.getContentType() == contentType) {
-                contentsFiltered.add(content);
-            }
-        }
-
-        return contentsFiltered;
-    }
-
-    @Override
-    public List<Content> findByAgeRating(AgeRating ageRating) {
-        List<Content> contentsFiltered = new ArrayList<>();
-
-        for(Content content : this.objects.values()) {
-            if(content.getAgeRating() == ageRating) {
-                contentsFiltered.add(content);
-            }
-        }
-
-        return contentsFiltered;
-    }
-
-    @Override
     protected long getObjectId(Content content) {
         return content.getId();
     }

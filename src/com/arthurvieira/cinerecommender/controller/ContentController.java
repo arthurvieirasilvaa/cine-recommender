@@ -106,15 +106,7 @@ public class ContentController {
     private void listAllContents() {
         List<Content> contents = this.contentService.listAll();
 
-        if(contents.isEmpty()) {
-            System.out.println("Ainda não há conteúdo cadastrado!");
-            return;
-        }
-
-        System.out.println("\n--- Conteúdos Cadastrados ---");
-        for (Content content : contents) {
-            System.out.println(content);
-        }
+        displayResults(contents, "Ainda não há conteúdo cadastrado!");
     }
 
     private void searchById() {
@@ -141,15 +133,32 @@ public class ContentController {
         }
     }
 
+    private void printContent(Content content) {
+        if(content instanceof Movie) {
+            System.out.println("\t-> Filme "+content.getTitle()+" com ID "+content.getId()+":\n"+
+                    "\t\t- Ano de lançamento: "+content.getReleaseYear()+"\n"+
+                    "\t\t- Gênero: "+content.getGenre().getName()+"\n"+
+                    "\t\t- Classificação Indicativa: "+content.getAgeRating().getDescription()+"\n"+
+                    "\t\t- Duração: "+((Movie) content).getDuration().toMinutes()+" minutos\n");
+        } else if (content instanceof Series) {
+            System.out.println("\t-> Série "+content.getTitle()+" com ID " + content.getId()+":\n"+
+                    "\t\t- Ano de lançamento: "+content.getReleaseYear()+"\n"+
+                    "\t\t- Gênero: "+content.getGenre().getName()+"\n"+
+                    "\t\t- Classificação Indicativa: "+content.getAgeRating().getDescription()+"\n"+
+                    "\t\t- Número de temporadas: "+((Series) content).getNumberOfSeasons()+"\n"+
+                    "\t\t- Total de episódios: "+((Series) content).getTotalEpisodes()+"\n");
+        }
+    }
+
     private void displayResults(List<Content> contents, String emptyMessage) {
         if(contents.isEmpty()) {
             System.out.println(emptyMessage);
             return;
         }
 
-        System.out.println("\n---"+contents.size()+" Resultados encontrados "+"---");
+        System.out.println("\n--- "+contents.size()+" Resultados encontrados "+"---");
         for(Content content : contents) {
-            System.out.println(content);
+            printContent(content);
         }
     }
 

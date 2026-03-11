@@ -54,7 +54,7 @@ public class User {
     }
 
     public String formatDate() {
-        String DATE_PATTERN = "dd-MMMM-yyyy";
+        String DATE_PATTERN = "dd/MM/yyyy";
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_PATTERN);
         return this.registrationDate.format(formatter);
     }

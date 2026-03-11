@@ -113,7 +113,7 @@ public class ContentController {
         int id = this.inputHandler.readPositiveInt("ID: ");
         try {
             Content content = this.contentService.filterContentById(id);
-            System.out.println(content);
+            printContent(content);
         } catch (InvalidIdException e) {
             System.out.println("O ID informado está inválido!");
         } catch (ObjectNotExistException e) {

@@ -1,6 +1,8 @@
 package com.arthurvieira.cinerecommender.controller;
 
 import com.arthurvieira.cinerecommender.domain.User;
+import com.arthurvieira.cinerecommender.exception.InvalidIdException;
+import com.arthurvieira.cinerecommender.exception.ObjectNotExistException;
 import com.arthurvieira.cinerecommender.service.UserService;
 import com.arthurvieira.cinerecommender.ui.ConsoleMenu;
 import com.arthurvieira.cinerecommender.ui.InputHandler;
@@ -34,6 +36,9 @@ public class UserController {
                 case 2:
                     this.listUsers();
                     break;
+                case 3:
+                    this.searchById();
+                    break;
                 case MenuOptions.BACK:
                     running = false;
                     break;
@@ -43,7 +48,7 @@ public class UserController {
         }
     }
 
-    public void registerUser() {
+    private void registerUser() {
         String name = this.inputHandler.readText("Nome: ");
         String email = this.inputHandler.readEmail("Email: ");
         User user = this.userService.createUser(name, email);
@@ -58,7 +63,7 @@ public class UserController {
                 "\tData do cadastro: "+user.formatDate()+"\n");
     }
 
-    public void listUsers() {
+    private void listUsers() {
         List<User> users = this.userService.listUsers();
 
         if(users.isEmpty()) {
@@ -69,6 +74,18 @@ public class UserController {
         System.out.println("\n--- "+users.size()+" Resultados encontrados "+"---");
         for(User user : users) {
             printUser(user);
+        }
+    }
+
+    private void searchById() {
+        long id = this.inputHandler.readPositiveInt("ID: ");
+        try {
+            User user = this.userService.filterUserById(id);
+            printUser(user);
+        } catch (InvalidIdException e) {
+            System.out.println("O ID informado está inválido!");
+        } catch (ObjectNotExistException e) {
+            System.out.println("O usuário com ID "+id+" não existe!");
         }
     }
 }

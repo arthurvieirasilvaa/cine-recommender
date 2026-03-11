@@ -39,6 +39,9 @@ public class UserController {
                 case 3:
                     this.searchById();
                     break;
+                case 4:
+                    this.delete();
+                    break;
                 case MenuOptions.BACK:
                     running = false;
                     break;
@@ -78,10 +81,22 @@ public class UserController {
     }
 
     private void searchById() {
-        long id = this.inputHandler.readPositiveInt("ID: ");
+        int id = this.inputHandler.readPositiveInt("ID: ");
         try {
             User user = this.userService.filterUserById(id);
             printUser(user);
+        } catch (InvalidIdException e) {
+            System.out.println("O ID informado está inválido!");
+        } catch (ObjectNotExistException e) {
+            System.out.println("O usuário com ID "+id+" não existe!");
+        }
+    }
+
+    private void delete() {
+        int id = this.inputHandler.readPositiveInt("ID: ");
+        try {
+            User user = this.userService.deleteUser(id);
+            System.out.println("O usuário "+user.getName()+" com ID "+user.getId()+" foi removido com sucesso!");
         } catch (InvalidIdException e) {
             System.out.println("O ID informado está inválido!");
         } catch (ObjectNotExistException e) {

@@ -27,4 +27,9 @@ public class UserService {
         ValidationUtils.validateId(id);
         return this.userRepository.findById(id);
     }
+
+    public User deleteUser(long id) {
+        ValidationUtils.validateId(id);
+        return this.userRepository.deleteById(id);
+    }
 }

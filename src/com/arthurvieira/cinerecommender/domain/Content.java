@@ -17,6 +17,7 @@ public abstract class Content {
     protected List<Rating> ratings;
 
     protected Content(long id, String title, Year releaseYear, Genre genre, AgeRating ageRating, ContentType contentType) {
+        ValidationUtils.validateId(id);
         this.id = id;
         this.title = title;
 
@@ -41,12 +42,12 @@ public abstract class Content {
         return Objects.hashCode(id);
     }
 
-    public void setId(long id) {
-        this.id = id;
-    }
-
     public long getId() {
         return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getTitle() {

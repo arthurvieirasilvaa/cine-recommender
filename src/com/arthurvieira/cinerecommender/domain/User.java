@@ -16,6 +16,7 @@ public class User {
     private final List<Rating> ratings;
 
     public User(long id, String name, String email, LocalDate registrationDate) {
+        ValidationUtils.validateId(id);
         this.id = id;
         this.name = name;
 

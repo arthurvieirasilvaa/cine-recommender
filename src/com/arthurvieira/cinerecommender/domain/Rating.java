@@ -5,14 +5,19 @@ import com.arthurvieira.cinerecommender.util.ValidationUtils;
 import java.util.Objects;
 
 public class Rating {
+    private long id;
     private final User user;
     private final Content content;
     private int stars;
 
-    public Rating(User user, Content content, int stars) {
-        ValidationUtils.validadeStars(stars);
+    public Rating(long id, User user, Content content, int stars) {
+        ValidationUtils.validateId(id);
+        this.id = id;
+
         this.user = Objects.requireNonNull(user, "O usuário não pode ser nulo");
         this.content = Objects.requireNonNull(content, "O conteúdo não pode ser nulo!");
+
+        ValidationUtils.validadeStars(stars);
         this.stars = stars;
     }
 
@@ -40,6 +45,14 @@ public class Rating {
     @Override
     public int hashCode() {
         return Objects.hash(user, content);
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public User getUser() {

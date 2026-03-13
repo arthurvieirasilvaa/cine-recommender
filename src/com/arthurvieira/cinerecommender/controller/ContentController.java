@@ -15,11 +15,16 @@ public class ContentController {
     private final ConsoleMenu consoleMenu;
     private final InputHandler inputHandler;
     private final ContentService contentService;
+    private final RatingController ratingController;
 
-    public ContentController(ConsoleMenu consoleMenu, InputHandler inputHandler, ContentService contentService) {
+    public ContentController(ConsoleMenu consoleMenu,
+                             InputHandler inputHandler,
+                             ContentService contentService,
+                             RatingController ratingController) {
         this.consoleMenu = consoleMenu;
         this.inputHandler = inputHandler;
         this.contentService = contentService;
+        this.ratingController = ratingController;
     }
 
     public void start() {
@@ -38,6 +43,7 @@ public class ContentController {
                     this.registerSeries();
                     break;
                 case 3:
+                    this.ratingController.registerRating();
                     break;
                 case 4:
                     this.listAllContents();

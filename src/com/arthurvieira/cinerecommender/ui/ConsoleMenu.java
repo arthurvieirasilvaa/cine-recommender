@@ -45,6 +45,7 @@ public class ConsoleMenu {
         System.out.println("3 - Buscar Usuário por ID");
         System.out.println("4 - Remover Usuário");
         System.out.println("5 - Ver Histórico de Avaliações");
+        System.out.println("6 - Remover avaliação");
         System.out.println("-1 - Voltar");
         System.out.println("------------------------------");
     }

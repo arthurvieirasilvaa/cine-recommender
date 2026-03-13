@@ -14,8 +14,8 @@ public class ValidationUtils {
     }
 
     public static void validateId(long id) {
-        if(id <= 0) {
-            throw new InvalidIdException("O ID deve ser positivo!");
+        if(id < 0) {
+            throw new InvalidIdException("O ID não deve ser negativo!");
         }
     }
 

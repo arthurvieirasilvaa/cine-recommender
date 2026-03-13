@@ -2,12 +2,11 @@ package com.arthurvieira.cinerecommender.app;
 
 import com.arthurvieira.cinerecommender.controller.ConsoleController;
 import com.arthurvieira.cinerecommender.controller.ContentController;
+import com.arthurvieira.cinerecommender.controller.RatingController;
 import com.arthurvieira.cinerecommender.controller.UserController;
-import com.arthurvieira.cinerecommender.repository.ContentRepository;
-import com.arthurvieira.cinerecommender.repository.FileContentRepository;
-import com.arthurvieira.cinerecommender.repository.FileUserRepository;
-import com.arthurvieira.cinerecommender.repository.UserRepository;
+import com.arthurvieira.cinerecommender.repository.*;
 import com.arthurvieira.cinerecommender.service.ContentService;
+import com.arthurvieira.cinerecommender.service.RatingService;
 import com.arthurvieira.cinerecommender.service.UserService;
 import com.arthurvieira.cinerecommender.ui.ConsoleMenu;
 import com.arthurvieira.cinerecommender.ui.InputHandler;
@@ -20,6 +19,7 @@ public class Main {
         // Paths:
         Path contentPath = Paths.get("data/contents.txt");
         Path userPath = Paths.get("data/users.txt");
+        Path ratingPath = Paths.get("data/ratings.txt");
 
         // UI:
         ConsoleMenu consoleMenu = new ConsoleMenu();
@@ -28,13 +28,16 @@ public class Main {
         // Repository:
         ContentRepository contentRepository = new FileContentRepository(contentPath);
         UserRepository userRepository = new FileUserRepository(userPath);
+        RatingRepository ratingRepository = new FileRatingRepository(ratingPath, contentRepository, userRepository);
 
         // Service:
         ContentService contentService = new ContentService(contentRepository);
         UserService userService = new UserService(userRepository);
+        RatingService ratingService = new RatingService(ratingRepository);
 
         // Controller:
-        ContentController contentController = new ContentController(consoleMenu, inputHandler, contentService);
+        RatingController ratingController = new RatingController(consoleMenu, inputHandler, ratingService, contentService, userService);
+        ContentController contentController = new ContentController(consoleMenu, inputHandler, contentService, ratingController);
         UserController userController = new UserController(consoleMenu, inputHandler, userService);
         ConsoleController consoleController = new ConsoleController(consoleMenu, inputHandler, contentController, userController);
         consoleController.start();

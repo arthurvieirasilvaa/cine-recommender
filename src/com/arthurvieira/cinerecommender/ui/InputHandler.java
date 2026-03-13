@@ -108,6 +108,18 @@ public class InputHandler {
         }
     }
 
+    public int readStars(String message) {
+        while (true) {
+            try {
+                int stars = this.readPositiveInt(message);
+                ValidationUtils.validadeStars(stars);
+                return stars;
+            } catch (IllegalArgumentException e) {
+                System.out.println("A nota da avaliação deve estar entre 1 e 5!");
+            }
+        }
+    }
+
     public void closeScanner() {
         this.scanner.close();
     }

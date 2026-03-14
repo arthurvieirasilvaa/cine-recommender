@@ -13,6 +13,8 @@ import java.util.*;
 public class FileContentRepository extends FileRepository<Content> implements ContentRepository {
     public FileContentRepository(Path path) {
         super(path);
+        this.objects = loadFromFile();
+        this.nextId = generateNextId();
     }
 
     @Override

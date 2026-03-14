@@ -36,7 +36,7 @@ public class Main {
         RatingService ratingService = new RatingService(ratingRepository);
 
         // Controller:
-        RatingController ratingController = new RatingController(consoleMenu, inputHandler, ratingService, contentService, userService);
+        RatingController ratingController = new RatingController(inputHandler, ratingService, contentService, userService);
         ContentController contentController = new ContentController(consoleMenu, inputHandler, contentService, ratingController);
         UserController userController = new UserController(consoleMenu, inputHandler, userService);
         ConsoleController consoleController = new ConsoleController(consoleMenu, inputHandler, contentController, userController);

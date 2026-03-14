@@ -11,18 +11,15 @@ import com.arthurvieira.cinerecommender.ui.ConsoleMenu;
 import com.arthurvieira.cinerecommender.ui.InputHandler;
 
 public class RatingController {
-    private final ConsoleMenu consoleMenu;
     private final InputHandler inputHandler;
     private final RatingService ratingService;
     private final ContentService contentService;
     private final UserService userService;
 
-    public RatingController(ConsoleMenu consoleMenu,
-                            InputHandler inputHandler,
+    public RatingController(InputHandler inputHandler,
                             RatingService ratingService,
                             ContentService contentService,
                             UserService userService) {
-        this.consoleMenu = consoleMenu;
         this.inputHandler = inputHandler;
         this.ratingService = ratingService;
         this.contentService = contentService;

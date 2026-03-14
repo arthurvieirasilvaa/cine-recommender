@@ -1,6 +1,5 @@
 package com.arthurvieira.cinerecommender.service;
 
-import com.arthurvieira.cinerecommender.controller.RatingController;
 import com.arthurvieira.cinerecommender.domain.Content;
 import com.arthurvieira.cinerecommender.domain.Rating;
 import com.arthurvieira.cinerecommender.domain.User;
@@ -22,7 +21,8 @@ public class RatingService {
         Rating rating;
 
         if(ratingFiltered.isEmpty()) {
-             rating = new Rating(0, user, content, stars); // the rating did not exist
+            rating = new Rating(0, user, content, stars); // the rating did not exist
+            user.addRating(rating); // the new rating is added to the user's ratings list
         }
 
         else {

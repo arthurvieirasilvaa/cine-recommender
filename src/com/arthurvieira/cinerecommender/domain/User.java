@@ -60,6 +60,10 @@ public class User {
         return this.registrationDate.format(formatter);
     }
 
+    public void addRating(Rating rating) {
+        this.ratings.add(rating);
+    }
+
     public long getId() {
         return id;
     }

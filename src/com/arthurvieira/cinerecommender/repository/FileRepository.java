@@ -1,6 +1,5 @@
 package com.arthurvieira.cinerecommender.repository;
 
-import com.arthurvieira.cinerecommender.domain.Content;
 import com.arthurvieira.cinerecommender.exception.ObjectNotExistException;
 
 import java.io.*;
@@ -14,13 +13,12 @@ import java.util.function.Predicate;
 
 public abstract class FileRepository<T> implements CrudRepository<T> {
     protected final Path path;
-    protected final Map<Long, T> objects;
+    protected Map<Long, T> objects;
     protected long nextId;
 
     public FileRepository(Path path) {
         this.path = path;
-        this.objects = loadFromFile();
-        this.nextId = generateNextId();
+        this.objects = new LinkedHashMap<>();
     }
 
     protected abstract T parseLine(String line);
@@ -28,7 +26,7 @@ public abstract class FileRepository<T> implements CrudRepository<T> {
     protected abstract long getObjectId(T object);
     protected abstract void setObjectId(T object, long id);
 
-    private Map<Long, T> loadFromFile() {
+    protected Map<Long, T> loadFromFile() {
         ensureFileExists();
 
         Map<Long, T> fileObjects = new LinkedHashMap<>();

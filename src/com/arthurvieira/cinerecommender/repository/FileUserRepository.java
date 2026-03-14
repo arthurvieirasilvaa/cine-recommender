@@ -8,6 +8,8 @@ import java.time.LocalDate;
 public class FileUserRepository extends FileRepository<User> implements UserRepository {
     public FileUserRepository(Path path) {
         super(path);
+        this.objects = loadFromFile();
+        this.nextId = generateNextId();
     }
 
     @Override

@@ -16,6 +16,9 @@ public class FileRatingRepository extends FileRepository<Rating> implements Rati
         super(path);
         this.contentRepository = contentRepository;
         this.userRepository = userRepository;
+
+        this.objects = loadFromFile();
+        this.nextId = generateNextId();
     }
 
     @Override

@@ -1,7 +1,5 @@
 package com.arthurvieira.cinerecommender.domain;
 
-import com.arthurvieira.cinerecommender.exception.InvalidNumberOfSeasonsException;
-import com.arthurvieira.cinerecommender.exception.InvalidTotalEpisodesException;
 import com.arthurvieira.cinerecommender.util.ValidationUtils;
 
 import java.time.Year;

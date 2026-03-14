@@ -14,11 +14,16 @@ public class UserController {
     private final ConsoleMenu consoleMenu;
     private final InputHandler inputHandler;
     private final UserService userService;
+    private final RatingController ratingController;
 
-    public UserController(ConsoleMenu consoleMenu, InputHandler inputHandler, UserService userService) {
+    public UserController(ConsoleMenu consoleMenu,
+                          InputHandler inputHandler,
+                          UserService userService,
+                          RatingController ratingController) {
         this.consoleMenu = consoleMenu;
         this.inputHandler = inputHandler;
         this.userService = userService;
+        this.ratingController = ratingController;
     }
 
     public void start() {
@@ -41,6 +46,9 @@ public class UserController {
                     break;
                 case 4:
                     this.delete();
+                    break;
+                case 6:
+                    this.ratingController.delete();
                     break;
                 case MenuOptions.BACK:
                     running = false;
@@ -80,7 +88,7 @@ public class UserController {
         }
     }
 
-    private void searchById() {
+    public void searchById() {
         int id = this.inputHandler.readPositiveInt("ID: ");
         try {
             User user = this.userService.filterUserById(id);

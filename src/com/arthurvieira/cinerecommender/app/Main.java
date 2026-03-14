@@ -42,7 +42,7 @@ public class Main {
         // Controller:
         RatingController ratingController = new RatingController(inputHandler, ratingService    , contentService, userService);
         ContentController contentController = new ContentController(consoleMenu, inputHandler, contentService, ratingController);
-        UserController userController = new UserController(consoleMenu, inputHandler, userService);
+        UserController userController = new UserController(consoleMenu, inputHandler, userService, ratingController);
         ConsoleController consoleController = new ConsoleController(consoleMenu, inputHandler, contentController, userController);
         consoleController.start();
 

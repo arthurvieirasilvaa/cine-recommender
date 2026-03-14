@@ -5,6 +5,7 @@ import com.arthurvieira.cinerecommender.domain.Rateable;
 import com.arthurvieira.cinerecommender.domain.Rating;
 import com.arthurvieira.cinerecommender.domain.User;
 import com.arthurvieira.cinerecommender.repository.RatingRepository;
+import com.arthurvieira.cinerecommender.util.ValidationUtils;
 
 import java.util.List;
 import java.util.function.Function;
@@ -47,5 +48,10 @@ public class RatingService {
         }
 
         return this.ratingRepository.save(rating);
+    }
+
+    public Rating deleteRating(long id) {
+        ValidationUtils.validateId(id);
+        return this.ratingRepository.deleteById(id);
     }
 }

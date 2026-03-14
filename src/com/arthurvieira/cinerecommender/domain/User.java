@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class User {
+public class User implements Rateable {
     private long id;
     private String name;
     private final String email;
@@ -60,8 +60,11 @@ public class User {
         return this.registrationDate.format(formatter);
     }
 
+    @Override
     public void addRating(Rating rating) {
-        this.ratings.add(rating);
+        if(!this.ratings.contains(rating)) {
+            this.ratings.add(rating);
+        }
     }
 
     public long getId() {
@@ -88,6 +91,7 @@ public class User {
         return registrationDate;
     }
 
+    @Override
     public List<Rating> getRatings() {
         return List.copyOf(ratings);
     }

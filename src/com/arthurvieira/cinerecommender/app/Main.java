@@ -35,8 +35,12 @@ public class Main {
         UserService userService = new UserService(userRepository);
         RatingService ratingService = new RatingService(ratingRepository);
 
+        // Data synchronization:
+        ratingService.syncRatings(contentService.listAll(), rating -> rating.getContent());
+        ratingService.syncRatings(userService.listUsers(), rating -> rating.getUser());
+
         // Controller:
-        RatingController ratingController = new RatingController(inputHandler, ratingService, contentService, userService);
+        RatingController ratingController = new RatingController(inputHandler, ratingService    , contentService, userService);
         ContentController contentController = new ContentController(consoleMenu, inputHandler, contentService, ratingController);
         UserController userController = new UserController(consoleMenu, inputHandler, userService);
         ConsoleController consoleController = new ConsoleController(consoleMenu, inputHandler, contentController, userController);

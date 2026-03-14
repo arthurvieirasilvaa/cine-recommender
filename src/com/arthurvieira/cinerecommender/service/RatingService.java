@@ -1,17 +1,33 @@
 package com.arthurvieira.cinerecommender.service;
 
 import com.arthurvieira.cinerecommender.domain.Content;
+import com.arthurvieira.cinerecommender.domain.Rateable;
 import com.arthurvieira.cinerecommender.domain.Rating;
 import com.arthurvieira.cinerecommender.domain.User;
 import com.arthurvieira.cinerecommender.repository.RatingRepository;
 
 import java.util.List;
+import java.util.function.Function;
 
 public class RatingService {
     private final RatingRepository ratingRepository;
 
     public RatingService(RatingRepository ratingRepository) {
         this.ratingRepository = ratingRepository;
+    }
+
+    public <T extends Rateable> void syncRatings(List<T> allObjects, Function<Rating, T> function) {
+        List<Rating> allRatings = this.ratingRepository.listAll();
+
+        for(Rating rating : allRatings) {
+            T object = function.apply(rating);
+            for(T t : allObjects) {
+                if(t.equals(object)) {
+                    t.addRating(rating);
+                    break;
+                }
+            }
+        }
     }
 
     public Rating createOrUpdateRating(User user, Content content, int stars) {

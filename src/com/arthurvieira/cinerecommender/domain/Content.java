@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public abstract class Content {
+public abstract class Content implements Rateable {
     protected long id;
     protected String title;
     protected Year releaseYear;
@@ -42,6 +42,13 @@ public abstract class Content {
         return Objects.hashCode(id);
     }
 
+    @Override
+    public void addRating(Rating rating) {
+        if(!this.ratings.contains(rating)) {
+            this.ratings.add(rating);
+        }
+    }
+
     public long getId() {
         return id;
     }
@@ -70,6 +77,7 @@ public abstract class Content {
         return contentType;
     }
 
+    @Override
     public List<Rating> getRatings() {
         return List.copyOf(ratings);
     }

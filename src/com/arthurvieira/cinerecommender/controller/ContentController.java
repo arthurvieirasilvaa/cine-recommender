@@ -112,14 +112,14 @@ public class ContentController implements Controller {
     private void listAllContents() {
         List<Content> contents = this.contentService.listAll();
 
-        displayResults(contents, "Ainda não há conteúdo cadastrado!", this::printContent);
+        displayResults(contents, "Ainda não há conteúdo cadastrado!", Content::printContent);
     }
 
     private void searchById() {
         int id = this.inputHandler.readPositiveInt("ID: ");
         try {
             Content content = this.contentService.filterContentById(id);
-            printContent(content);
+            content.printContent();
         } catch (InvalidIdException e) {
             System.out.println("O ID informado está inválido!");
         } catch (ObjectNotExistException e) {
@@ -139,29 +139,12 @@ public class ContentController implements Controller {
         }
     }
 
-    private void printContent(Content content) {
-        if(content instanceof Movie) {
-            System.out.println("\t-> Filme "+content.getTitle()+" com ID "+content.getId()+":\n"+
-                    "\t\t- Ano de lançamento: "+content.getReleaseYear()+"\n"+
-                    "\t\t- Gênero: "+content.getGenre().getName()+"\n"+
-                    "\t\t- Classificação Indicativa: "+content.getAgeRating().getDescription()+"\n"+
-                    "\t\t- Duração: "+((Movie) content).getDuration().toMinutes()+" minutos\n");
-        } else if (content instanceof Series) {
-            System.out.println("\t-> Série "+content.getTitle()+" com ID " + content.getId()+":\n"+
-                    "\t\t- Ano de lançamento: "+content.getReleaseYear()+"\n"+
-                    "\t\t- Gênero: "+content.getGenre().getName()+"\n"+
-                    "\t\t- Classificação Indicativa: "+content.getAgeRating().getDescription()+"\n"+
-                    "\t\t- Número de temporadas: "+((Series) content).getNumberOfSeasons()+"\n"+
-                    "\t\t- Total de episódios: "+((Series) content).getTotalEpisodes()+"\n");
-        }
-    }
-
     private void searchByGenre() {
         this.consoleMenu.showGenreOptions();
         Genre genre = this.inputHandler.readEnum("Gênero: ", Genre.values());
 
         List<Content> contents = this.contentService.filterContentsByGenre(genre);
-        displayResults(contents, "Ainda não há conteúdo de "+genre.getName()+" cadastrado!", this::printContent);
+        displayResults(contents, "Ainda não há conteúdo de "+genre.getName()+" cadastrado!", Content::printContent);
     }
 
     private void searchByContentType() {
@@ -170,7 +153,7 @@ public class ContentController implements Controller {
 
         List<Content> contents = this.contentService.filterContentsByContentType(contentType);
 
-        displayResults(contents, "Ainda não há conteúdo do tipo "+contentType.getType()+" cadastrado!", this::printContent);
+        displayResults(contents, "Ainda não há conteúdo do tipo "+contentType.getType()+" cadastrado!", Content::printContent);
     }
 
     private void searchByAgeRating() {
@@ -179,6 +162,6 @@ public class ContentController implements Controller {
 
         List<Content> contents = this.contentService.filterContentsByAgeRating(ageRating);
 
-        displayResults(contents, "Ainda não há conteúdo da classificação indicativa "+ageRating.getDescription()+" cadastrado!", this::printContent);
+        displayResults(contents, "Ainda não há conteúdo da classificação indicativa "+ageRating.getDescription()+" cadastrado!", Content::printContent);
     }
 }

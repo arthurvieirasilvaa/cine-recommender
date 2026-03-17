@@ -47,6 +47,12 @@ public class Rating {
         return Objects.hash(user, content);
     }
 
+    public void printRating() {
+        System.out.println("\n\t-> Avaliação com ID "+getId()+":");
+        this.getContent().printSummary();
+        System.out.println("\t\t - Nota: "+getStars()+"/5\n");
+    }
+
     public long getId() {
         return id;
     }

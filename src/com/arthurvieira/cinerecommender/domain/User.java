@@ -54,6 +54,13 @@ public class User implements Rateable {
         return Objects.hash(id, email);
     }
 
+    public void printUser() {
+        System.out.println("\n\tID: "+this.getId()+"\n"+
+                "\tNome: "+this.getName()+"\n"+
+                "\tEmail: "+this.getEmail()+"\n"+
+                "\tData do cadastro: "+this.formatDate());
+    }
+
     public String formatDate() {
         String DATE_PATTERN = "dd/MM/yyyy";
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_PATTERN);

@@ -70,24 +70,17 @@ public class UserController implements Controller {
         System.out.println("O ID gerado foi: "+user.getId());
     }
 
-    private void printUser(User user) {
-        System.out.println("\tID: "+user.getId()+"\n"+
-                "\tNome: "+user.getName()+"\n"+
-                "\tEmail: "+user.getEmail()+"\n"+
-                "\tData do cadastro: "+user.formatDate()+"\n");
-    }
-
     private void listUsers() {
         List<User> users = this.userService.listUsers();
 
-        displayResults(users, "Ainda não há usuário cadastrado!", this::printUser);
+        displayResults(users, "Ainda não há usuário cadastrado!", User::printUser);
     }
 
     public void searchById() {
         int id = this.inputHandler.readPositiveInt("ID: ");
         try {
             User user = this.userService.filterUserById(id);
-            printUser(user);
+            user.printUser();
         } catch (InvalidIdException e) {
             System.out.println("O ID informado está inválido!");
         } catch (ObjectNotExistException e) {

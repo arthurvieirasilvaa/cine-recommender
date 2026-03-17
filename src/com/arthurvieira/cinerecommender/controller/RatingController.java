@@ -55,27 +55,13 @@ public class RatingController implements Controller {
         }
     }
 
-    private void printRating(Rating rating) {
-        System.out.println("\t-> Avaliação com ID "+rating.getId()+":");
-
-        if(rating.getContent() instanceof Movie) {
-            System.out.println("\t\t- Filme: "+rating.getContent().getTitle());
-        }
-
-        else if(rating.getContent() instanceof Series) {
-            System.out.println("\t\t- Série: "+rating.getContent().getTitle());
-        }
-
-        System.out.println("\t\t- Nota: "+rating.getStars()+"/5\n");
-    }
-
     void showUserRatingHistory() {
         int id = this.inputHandler.readPositiveInt("ID do usuário: ");
         try {
             User user = this.userService.filterUserById(id);
             List<Rating> userRatingHistory = this.ratingService.getUserRatingHistory(user);
 
-            displayResults(userRatingHistory, "Ainda não há avaliações do usuário "+user.getName()+" cadastradas!", this::printRating);
+            displayResults(userRatingHistory, "Ainda não há avaliações do usuário "+user.getName()+" cadastradas!", Rating::printRating);
         } catch (InvalidIdException e) {
             System.out.println("O ID informado está inválido!");
         } catch (ObjectNotExistException e) {

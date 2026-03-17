@@ -10,7 +10,7 @@ public interface Controller {
             return;
         }
 
-        System.out.println("\n--- "+list.size()+" Resultados encontrados "+"---");
+        System.out.print("\n--- "+list.size()+" Resultados encontrados "+"---");
         for(T t : list) {
             printer.accept(t);
         }

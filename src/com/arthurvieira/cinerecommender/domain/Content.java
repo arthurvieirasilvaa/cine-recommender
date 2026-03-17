@@ -42,6 +42,9 @@ public abstract class Content implements Rateable {
         return Objects.hashCode(id);
     }
 
+    public abstract void printContent();
+    public abstract void printSummary();
+
     @Override
     public void addRating(Rating rating) {
         if(!this.ratings.contains(rating)) {

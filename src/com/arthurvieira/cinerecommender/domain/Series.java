@@ -33,6 +33,21 @@ public class Series extends Content {
                 '}';
     }
 
+    @Override
+    public void printContent() {
+        System.out.println("\n\t-> Série "+this.getTitle()+" com ID " + this.getId()+":\n"+
+                "\t\t- Ano de lançamento: "+this.getReleaseYear()+"\n"+
+                "\t\t- Gênero: "+this.getGenre().getName()+"\n"+
+                "\t\t- Classificação Indicativa: "+this.getAgeRating().getDescription()+"\n"+
+                "\t\t- Número de temporadas: "+this.getNumberOfSeasons()+"\n"+
+                "\t\t- Total de episódios: "+this.getTotalEpisodes());
+    }
+
+    @Override
+    public void printSummary() {
+        System.out.println("\t\t - Série: "+this.getTitle());
+    }
+
     public int getNumberOfSeasons() {
         return numberOfSeasons;
     }

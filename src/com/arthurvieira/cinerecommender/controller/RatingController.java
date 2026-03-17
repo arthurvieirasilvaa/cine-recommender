@@ -1,8 +1,6 @@
 package com.arthurvieira.cinerecommender.controller;
 
-import com.arthurvieira.cinerecommender.domain.Content;
-import com.arthurvieira.cinerecommender.domain.Rating;
-import com.arthurvieira.cinerecommender.domain.User;
+import com.arthurvieira.cinerecommender.domain.*;
 import com.arthurvieira.cinerecommender.exception.InvalidIdException;
 import com.arthurvieira.cinerecommender.exception.ObjectNotExistException;
 import com.arthurvieira.cinerecommender.service.ContentService;
@@ -10,7 +8,9 @@ import com.arthurvieira.cinerecommender.service.RatingService;
 import com.arthurvieira.cinerecommender.service.UserService;
 import com.arthurvieira.cinerecommender.ui.InputHandler;
 
-public class RatingController {
+import java.util.List;
+
+public class RatingController implements Controller {
     private final InputHandler inputHandler;
     private final RatingService ratingService;
     private final ContentService contentService;
@@ -52,6 +52,34 @@ public class RatingController {
             System.out.println("O ID informado está inválido!");
         } catch (ObjectNotExistException e) {
             System.out.println("A avaliação com ID "+id+" não existe!");
+        }
+    }
+
+    private void printRating(Rating rating) {
+        System.out.println("\t-> Avaliação com ID "+rating.getId()+":");
+
+        if(rating.getContent() instanceof Movie) {
+            System.out.println("\t\t- Filme: "+rating.getContent().getTitle());
+        }
+
+        else if(rating.getContent() instanceof Series) {
+            System.out.println("\t\t- Série: "+rating.getContent().getTitle());
+        }
+
+        System.out.println("\t\t- Nota: "+rating.getStars()+"/5\n");
+    }
+
+    void showUserRatingHistory() {
+        int id = this.inputHandler.readPositiveInt("ID do usuário: ");
+        try {
+            User user = this.userService.filterUserById(id);
+            List<Rating> userRatingHistory = this.ratingService.getUserRatingHistory(user);
+
+            displayResults(userRatingHistory, "Ainda não há avaliações do usuário "+user.getName()+" cadastradas!", this::printRating);
+        } catch (InvalidIdException e) {
+            System.out.println("O ID informado está inválido!");
+        } catch (ObjectNotExistException e) {
+            System.out.println("O usuário com ID "+id+" não existe!");
         }
     }
 }

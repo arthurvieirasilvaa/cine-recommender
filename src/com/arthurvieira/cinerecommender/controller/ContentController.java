@@ -11,7 +11,7 @@ import java.time.Duration;
 import java.time.Year;
 import java.util.List;
 
-public class ContentController {
+public class ContentController implements Controller {
     private final ConsoleMenu consoleMenu;
     private final InputHandler inputHandler;
     private final ContentService contentService;
@@ -112,7 +112,7 @@ public class ContentController {
     private void listAllContents() {
         List<Content> contents = this.contentService.listAll();
 
-        displayResults(contents, "Ainda não há conteúdo cadastrado!");
+        displayResults(contents, "Ainda não há conteúdo cadastrado!", this::printContent);
     }
 
     private void searchById() {
@@ -156,24 +156,12 @@ public class ContentController {
         }
     }
 
-    private void displayResults(List<Content> contents, String emptyMessage) {
-        if(contents.isEmpty()) {
-            System.out.println(emptyMessage);
-            return;
-        }
-
-        System.out.println("\n--- "+contents.size()+" Resultados encontrados "+"---");
-        for(Content content : contents) {
-            printContent(content);
-        }
-    }
-
     private void searchByGenre() {
         this.consoleMenu.showGenreOptions();
         Genre genre = this.inputHandler.readEnum("Gênero: ", Genre.values());
 
         List<Content> contents = this.contentService.filterContentsByGenre(genre);
-        displayResults(contents, "Ainda não há conteúdo de "+genre.getName()+" cadastrado!");
+        displayResults(contents, "Ainda não há conteúdo de "+genre.getName()+" cadastrado!", this::printContent);
     }
 
     private void searchByContentType() {
@@ -182,7 +170,7 @@ public class ContentController {
 
         List<Content> contents = this.contentService.filterContentsByContentType(contentType);
 
-        displayResults(contents, "Ainda não há conteúdo do tipo "+contentType.getType()+" cadastrado!");
+        displayResults(contents, "Ainda não há conteúdo do tipo "+contentType.getType()+" cadastrado!", this::printContent);
     }
 
     private void searchByAgeRating() {
@@ -191,6 +179,6 @@ public class ContentController {
 
         List<Content> contents = this.contentService.filterContentsByAgeRating(ageRating);
 
-        displayResults(contents, "Ainda não há conteúdo da classificação indicativa "+ageRating.getDescription()+" cadastrado!");
+        displayResults(contents, "Ainda não há conteúdo da classificação indicativa "+ageRating.getDescription()+" cadastrado!", this::printContent);
     }
 }

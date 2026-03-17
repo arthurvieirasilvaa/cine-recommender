@@ -10,7 +10,7 @@ import com.arthurvieira.cinerecommender.ui.MenuOptions;
 
 import java.util.List;
 
-public class UserController {
+public class UserController implements Controller {
     private final ConsoleMenu consoleMenu;
     private final InputHandler inputHandler;
     private final UserService userService;
@@ -47,6 +47,9 @@ public class UserController {
                 case 4:
                     this.delete();
                     break;
+                case 5:
+                    this.ratingController.showUserRatingHistory();
+                    break;
                 case 6:
                     this.ratingController.delete();
                     break;
@@ -77,15 +80,7 @@ public class UserController {
     private void listUsers() {
         List<User> users = this.userService.listUsers();
 
-        if(users.isEmpty()) {
-            System.out.println("Ainda não há usuário cadastrado!");
-            return;
-        }
-
-        System.out.println("\n--- "+users.size()+" Resultados encontrados "+"---");
-        for(User user : users) {
-            printUser(user);
-        }
+        displayResults(users, "Ainda não há usuário cadastrado!", this::printUser);
     }
 
     public void searchById() {

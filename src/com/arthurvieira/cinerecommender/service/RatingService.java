@@ -54,4 +54,8 @@ public class RatingService {
         ValidationUtils.validateId(id);
         return this.ratingRepository.deleteById(id);
     }
+
+    public List<Rating> getUserRatingHistory(User user) {
+        return user.getRatings();
+    }
 }

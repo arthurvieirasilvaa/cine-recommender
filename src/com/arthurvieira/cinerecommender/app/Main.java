@@ -4,6 +4,7 @@ import com.arthurvieira.cinerecommender.controller.ConsoleController;
 import com.arthurvieira.cinerecommender.controller.ContentController;
 import com.arthurvieira.cinerecommender.controller.RatingController;
 import com.arthurvieira.cinerecommender.controller.UserController;
+import com.arthurvieira.cinerecommender.domain.Rating;
 import com.arthurvieira.cinerecommender.repository.*;
 import com.arthurvieira.cinerecommender.service.ContentService;
 import com.arthurvieira.cinerecommender.service.RatingService;
@@ -36,8 +37,8 @@ public class Main {
         RatingService ratingService = new RatingService(ratingRepository);
 
         // Data synchronization:
-        ratingService.syncRatings(contentService.listAll(), rating -> rating.getContent());
-        ratingService.syncRatings(userService.listUsers(), rating -> rating.getUser());
+        ratingService.syncRatings(contentService.listAll(), Rating::getContent);
+        ratingService.syncRatings(userService.listUsers(), Rating::getUser);
 
         // Controller:
         RatingController ratingController = new RatingController(inputHandler, ratingService    , contentService, userService);

@@ -7,6 +7,7 @@ import com.arthurvieira.cinerecommender.exception.ContentNotExistException;
 import com.arthurvieira.cinerecommender.exception.UserNotExistException;
 
 import java.nio.file.Path;
+import java.util.Optional;
 
 public class FileRatingRepository extends FileRepository<Rating> implements RatingRepository {
     private final ContentRepository contentRepository;
@@ -22,7 +23,7 @@ public class FileRatingRepository extends FileRepository<Rating> implements Rati
     }
 
     @Override
-    protected Rating parseLine(String line) {
+    protected Optional<Rating> parseLine(String line) {
         try {
             String[] ratingFields = line.split(";");
 
@@ -48,10 +49,10 @@ public class FileRatingRepository extends FileRepository<Rating> implements Rati
                 throw new ContentNotExistException("O conteúdo com o ID "+contentId+" não existe!");
             }
 
-            return new Rating(id, user, content, stars);
+            return Optional.of(new Rating(id, user, content, stars));
         } catch (Exception e) {
             System.out.println("Ocorreu ao processar a linha: "+line);
-            return null;
+            return Optional.empty();
         }
     }
 

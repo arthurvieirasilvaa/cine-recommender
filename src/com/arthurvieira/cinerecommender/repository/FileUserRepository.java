@@ -4,6 +4,7 @@ import com.arthurvieira.cinerecommender.domain.User;
 
 import java.nio.file.Path;
 import java.time.LocalDate;
+import java.util.Optional;
 
 public class FileUserRepository extends FileRepository<User> implements UserRepository {
     public FileUserRepository(Path path) {
@@ -13,7 +14,7 @@ public class FileUserRepository extends FileRepository<User> implements UserRepo
     }
 
     @Override
-    protected User parseLine(String line) {
+    protected Optional<User> parseLine(String line) {
         try {
             String[] userFields = line.split(";");
 
@@ -27,10 +28,10 @@ public class FileUserRepository extends FileRepository<User> implements UserRepo
             String email = userFields[2];
             LocalDate registrationDate = LocalDate.parse(userFields[3]);
 
-            return new User(id, name, email, registrationDate);
+            return Optional.of(new User(id, name, email, registrationDate));
         } catch (Exception e) {
             System.out.println("Ocorreu ao processar a linha: "+line);
-            return null;
+            return Optional.empty();
         }
     }
 

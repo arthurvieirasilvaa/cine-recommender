@@ -18,7 +18,7 @@ public class FileContentRepository extends FileRepository<Content> implements Co
     }
 
     @Override
-    protected Content parseLine(String line) {
+    protected Optional<Content> parseLine(String line) {
         try {
             String[] contentFields = line.split(";");
 
@@ -37,20 +37,20 @@ public class FileContentRepository extends FileRepository<Content> implements Co
             if(type == ContentType.MOVIE) {
                 Duration duration = Duration.ofMinutes(Long.parseLong(contentFields[6]));
 
-                return new Movie(id, title, year, genre, ageRating, duration);
+                return Optional.of(new Movie(id, title, year, genre, ageRating, duration));
             }
 
             if(type == ContentType.SERIES) {
                 int numberOfSeasons = Integer.parseInt(contentFields[6]);
                 int totalEpisodes = Integer.parseInt(contentFields[7]);
 
-                return new Series(id, title, year, genre, ageRating, numberOfSeasons, totalEpisodes);
+                return Optional.of(new Series(id, title, year, genre, ageRating, numberOfSeasons, totalEpisodes));
             }
 
             throw new InvalidContentTypeException("O tipo do conteúdo "+type+" é inválido!");
         } catch (Exception e) {
             System.out.println("Ocorreu ao processar a linha: "+line);
-            return null;
+            return Optional.empty();
         }
     }
 

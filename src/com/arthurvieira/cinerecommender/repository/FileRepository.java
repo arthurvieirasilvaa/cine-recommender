@@ -5,11 +5,10 @@ import com.arthurvieira.cinerecommender.exception.ObjectNotExistException;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 public abstract class FileRepository<T> implements CrudRepository<T> {
     protected final Path path;
@@ -21,7 +20,7 @@ public abstract class FileRepository<T> implements CrudRepository<T> {
         this.objects = new LinkedHashMap<>();
     }
 
-    protected abstract T parseLine(String line);
+    protected abstract Optional<T> parseLine(String line);
     protected abstract String convertObjectToFileLine(T object);
     protected abstract long getObjectId(T object);
     protected abstract void setObjectId(T object, long id);
@@ -36,8 +35,8 @@ public abstract class FileRepository<T> implements CrudRepository<T> {
             String line;
 
             while ((line = bufferedReader.readLine()) != null) {
-                T object = parseLine(line);
-                fileObjects.put(getObjectId(object), object);
+                Optional<T> optionalObject = parseLine(line);
+                optionalObject.ifPresent(object -> fileObjects.put(getObjectId(object), object));
             }
         } catch (IOException e) {
             System.out.println("Ocorreu um erro ao carregar os dados do arquivo "+path.getFileName());
@@ -98,13 +97,8 @@ public abstract class FileRepository<T> implements CrudRepository<T> {
     }
 
     public T findById(long id) {
-        T object = this.objects.get(id);
-
-        if(object != null) {
-            return object;
-        }
-
-        throw new ObjectNotExistException("O objeto de ID "+id+" não existe!");
+        return Optional.ofNullable(this.objects.get(id)).
+                orElseThrow(() -> new ObjectNotExistException("O objeto de ID "+id+" não existe!"));
     }
 
     public List<T> listAll() {

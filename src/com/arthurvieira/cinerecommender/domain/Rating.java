@@ -48,7 +48,7 @@ public class Rating {
     }
 
     public void printRating() {
-        System.out.println("\n\t-> Avaliação com ID "+getId()+":");
+        System.out.println("\t-> Avaliação com ID "+getId()+":");
         this.getContent().printSummary();
         System.out.println("\t\t - Nota: "+getStars()+"/5\n");
     }

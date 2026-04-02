@@ -55,10 +55,10 @@ public class User implements Rateable {
     }
 
     public void printUser() {
-        System.out.println("\n\tID: "+this.getId()+"\n"+
+        System.out.println("\tID: "+this.getId()+"\n"+
                 "\tNome: "+this.getName()+"\n"+
                 "\tEmail: "+this.getEmail()+"\n"+
-                "\tData do cadastro: "+this.formatDate());
+                "\tData do cadastro: "+this.formatDate()+"\n");
     }
 
     public String formatDate() {

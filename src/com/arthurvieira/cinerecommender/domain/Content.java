@@ -52,6 +52,14 @@ public abstract class Content implements Rateable {
         }
     }
 
+    public double getAverageRating() {
+        return this.ratings
+                .stream()
+                .mapToInt(Rating::getStars)
+                .average()
+                .orElse(0);
+    }
+
     public long getId() {
         return id;
     }

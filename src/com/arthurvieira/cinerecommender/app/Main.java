@@ -1,13 +1,11 @@
 package com.arthurvieira.cinerecommender.app;
 
-import com.arthurvieira.cinerecommender.controller.ConsoleController;
-import com.arthurvieira.cinerecommender.controller.ContentController;
-import com.arthurvieira.cinerecommender.controller.RatingController;
-import com.arthurvieira.cinerecommender.controller.UserController;
+import com.arthurvieira.cinerecommender.controller.*;
 import com.arthurvieira.cinerecommender.domain.Rating;
 import com.arthurvieira.cinerecommender.repository.*;
 import com.arthurvieira.cinerecommender.service.ContentService;
 import com.arthurvieira.cinerecommender.service.RatingService;
+import com.arthurvieira.cinerecommender.service.RecommendationService;
 import com.arthurvieira.cinerecommender.service.UserService;
 import com.arthurvieira.cinerecommender.ui.ConsoleMenu;
 import com.arthurvieira.cinerecommender.ui.InputHandler;
@@ -35,6 +33,7 @@ public class Main {
         ContentService contentService = new ContentService(contentRepository);
         UserService userService = new UserService(userRepository);
         RatingService ratingService = new RatingService(ratingRepository);
+        RecommendationService recommendationService = new RecommendationService(contentRepository, ratingRepository);
 
         // Data synchronization:
         ratingService.syncRatings(contentService.listAll(), Rating::getContent);
@@ -44,7 +43,8 @@ public class Main {
         RatingController ratingController = new RatingController(inputHandler, ratingService    , contentService, userService);
         ContentController contentController = new ContentController(consoleMenu, inputHandler, contentService, ratingController);
         UserController userController = new UserController(consoleMenu, inputHandler, userService, ratingController);
-        ConsoleController consoleController = new ConsoleController(consoleMenu, inputHandler, contentController, userController);
+        RecommendationController recommendationController = new RecommendationController(consoleMenu, inputHandler, recommendationService);
+        ConsoleController consoleController = new ConsoleController(consoleMenu, inputHandler, contentController, userController, recommendationController);
         consoleController.start();
 
         inputHandler.closeScanner();

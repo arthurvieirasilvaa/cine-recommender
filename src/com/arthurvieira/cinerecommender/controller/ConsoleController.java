@@ -9,15 +9,18 @@ public class ConsoleController {
     private final InputHandler inputHandler;
     private final ContentController contentController;
     private final UserController userController;
+    private final RecommendationController recommendationController;
 
     public ConsoleController(ConsoleMenu consoleMenu,
                              InputHandler inputHandler,
                              ContentController contentController,
-                             UserController userController) {
+                             UserController userController,
+                             RecommendationController recommendationController) {
         this.consoleMenu = consoleMenu;
         this.inputHandler = inputHandler;
         this.contentController = contentController;
         this.userController = userController;
+        this.recommendationController = recommendationController;
     }
 
     public void start() {
@@ -33,7 +36,7 @@ public class ConsoleController {
                     this.contentController.start();
                     break;
                 case 2:
-                    this.consoleMenu.showRecommendationsMenu();
+                    this.recommendationController.start();
                     break;
                 case 3:
                     this.userController.start();

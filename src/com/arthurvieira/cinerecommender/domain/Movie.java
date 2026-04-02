@@ -2,8 +2,6 @@ package com.arthurvieira.cinerecommender.domain;
 
 import com.arthurvieira.cinerecommender.util.ValidationUtils;
 
-import javax.sound.midi.Soundbank;
-import java.sql.SQLOutput;
 import java.time.Duration;
 import java.time.Year;
 

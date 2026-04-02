@@ -6,9 +6,8 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
-import java.util.function.Consumer;
 import java.util.function.Predicate;
-import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 public abstract class FileRepository<T> implements CrudRepository<T> {
     protected final Path path;
@@ -106,25 +105,18 @@ public abstract class FileRepository<T> implements CrudRepository<T> {
     }
 
     public List<T> filter(Predicate<T> predicate) {
-        List<T> objectsFiltered = new ArrayList<>();
-
-        for(T object : this.objects.values()) {
-            if(predicate.test(object)) {
-                objectsFiltered.add(object);
-            }
-        }
-
-        return objectsFiltered;
+        return this.objects.values()
+                .stream()
+                .filter(predicate)
+                .collect(Collectors.toList());
     }
 
     protected long generateNextId() {
-        long maxId = 0;
-        for(Long id : this.objects.keySet()) {
-            if(id > maxId) {
-                maxId = id;
-            }
-        }
-
-        return maxId+1;
+        return this.objects.keySet()
+                .stream()
+                .mapToLong(id -> id)
+                .max()
+                .orElse(0L)
+                + 1;
     }
 }

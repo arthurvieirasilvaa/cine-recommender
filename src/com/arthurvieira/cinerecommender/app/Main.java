@@ -43,7 +43,7 @@ public class Main {
         RatingController ratingController = new RatingController(inputHandler, ratingService    , contentService, userService);
         ContentController contentController = new ContentController(consoleMenu, inputHandler, contentService, ratingController);
         UserController userController = new UserController(consoleMenu, inputHandler, userService, ratingController);
-        RecommendationController recommendationController = new RecommendationController(consoleMenu, inputHandler, recommendationService);
+        RecommendationController recommendationController = new RecommendationController(consoleMenu, inputHandler, recommendationService, userService);
         ConsoleController consoleController = new ConsoleController(consoleMenu, inputHandler, contentController, userController, recommendationController);
         consoleController.start();
 

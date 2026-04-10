@@ -44,6 +44,9 @@ public class RecommendationController implements Controller {
                 case 2:
                     this.showContentsByUserFavoriteGenre();
                     break;
+                case 3:
+                    this.showContentsByUserHistory();
+                    break;
                 case MenuOptions.BACK:
                     running = false;
                     break;
@@ -76,6 +79,23 @@ public class RecommendationController implements Controller {
             System.out.println("O ID informado está inválido!");
         } catch (ObjectNotExistException e) {
             System.out.println("O usuário com ID "+id+" não existe!");
+        } catch (UserWithNoRatings e) {
+            System.out.println("O usuário não possui avaliações!");
+        }
+    }
+
+    private void showContentsByUserHistory() {
+        int id = this.inputHandler.readPositiveInt("ID do usuário: ");
+        try {
+            User user = this.userService.filterUserById(id);
+
+            List<Content> contentsByUserHistory = this.recommendationService.recommendByHistory(user);
+
+            displayResults(contentsByUserHistory, "Não foi possível recomendar nenhum conteúdo!", this::printRecommendedContents);
+        } catch (InvalidIdException e) {
+            System.out.println("O ID informado está inválido!");
+        } catch (ObjectNotExistException e) {
+            System.out.println("O usuário com ID " + id + " não existe!");
         } catch (UserWithNoRatings e) {
             System.out.println("O usuário não possui avaliações!");
         }

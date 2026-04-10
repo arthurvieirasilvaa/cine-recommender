@@ -47,6 +47,9 @@ public class RecommendationController implements Controller {
                 case 3:
                     this.showContentsByUserHistory();
                     break;
+                case 4:
+                    this.showNewReleasesContents();
+                    break;
                 case MenuOptions.BACK:
                     running = false;
                     break;
@@ -58,7 +61,10 @@ public class RecommendationController implements Controller {
 
     private void printRecommendedContents(Content content) {
         content.printSummary();
-        System.out.printf("\t\t - Média: %.1f/5%n%n", content.getAverageRating());
+        System.out.printf("\t\t - Média: %.1f/5%n", content.getAverageRating());
+        System.out.println("\t\t - Ano de lançamento: "+content.getReleaseYear());
+        System.out.println("\t\t - Gênero: "+content.getGenre().getName());
+        System.out.println("\t\t - Classificação Indicativa: "+content.getAgeRating().getDescription()+"\n");
     }
 
     private void showTopRatedContents() {
@@ -99,5 +105,11 @@ public class RecommendationController implements Controller {
         } catch (UserWithNoRatings e) {
             System.out.println("O usuário não possui avaliações!");
         }
+    }
+
+    private void showNewReleasesContents() {
+        List<Content> newReleases = this.recommendationService.recommendNewReleases();
+
+        displayResults(newReleases,"Não foi possível encontrar os lançamentos e novidades!", this::printRecommendedContents);
     }
 }

@@ -34,7 +34,7 @@ public class ConsoleMenu {
         System.out.println("1 - Top 10 melhores avaliados");
         System.out.println("2 - Recomendar por gênero favorito");
         System.out.println("3 - Recomendar baseado em histórico do usuário");
-        System.out.println("4 - Lançamento e novidades");
+        System.out.println("4 - Lançamentos e novidades");
         System.out.println("5 - Quem viu este, também viu");
         System.out.println("-1 - Voltar");
         System.out.println("------------------------------");

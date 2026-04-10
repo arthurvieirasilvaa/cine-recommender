@@ -111,4 +111,13 @@ public class RecommendationService {
                 content -> genres.contains(content.getGenre())
                         && ageRatings.contains(content.getAgeRating()));
     }
+
+    public List<Content> recommendNewReleases() {
+        return this.contentRepository.listAll()
+                .stream()
+                .sorted(Comparator.comparing(Content::getReleaseYear).reversed()
+                        .thenComparing(Content::getAverageRating, Comparator.reverseOrder()))
+                .limit(10)
+                .toList();
+    }
 }

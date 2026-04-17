@@ -24,6 +24,22 @@ public abstract class FileRepository<T> implements CrudRepository<T> {
     protected abstract long getObjectId(T object);
     protected abstract void setObjectId(T object, long id);
 
+    private void ensureFileExists() {
+        try {
+            Path parentDirectory = this.path.getParent();
+
+            if(parentDirectory != null && Files.notExists(parentDirectory)) {
+                Files.createDirectories(parentDirectory);
+            }
+
+            if(Files.notExists(this.path)) {
+                Files.createFile(this.path);
+            }
+        } catch (IOException e) {
+            System.out.println("Ocorreu um erro ao preparar o arquivo de dados "+this.path.getFileName()+"!");
+        }
+    }
+
     protected Map<Long, T> loadFromFile() {
         ensureFileExists();
 
@@ -42,22 +58,6 @@ public abstract class FileRepository<T> implements CrudRepository<T> {
         }
 
         return fileObjects;
-    }
-
-    private void ensureFileExists() {
-        try {
-            Path parentDirectory = this.path.getParent();
-
-            if(parentDirectory != null && Files.notExists(parentDirectory)) {
-                Files.createDirectories(parentDirectory);
-            }
-
-            if(Files.notExists(this.path)) {
-                Files.createFile(this.path);
-            }
-        } catch (IOException e) {
-            System.out.println("Ocorreu um erro ao preparar o arquivo de dados "+this.path.getFileName()+"!");
-        }
     }
 
     protected void writeAllToFile() {

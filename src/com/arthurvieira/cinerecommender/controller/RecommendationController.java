@@ -5,6 +5,7 @@ import com.arthurvieira.cinerecommender.domain.User;
 import com.arthurvieira.cinerecommender.exception.InvalidIdException;
 import com.arthurvieira.cinerecommender.exception.ObjectNotExistException;
 import com.arthurvieira.cinerecommender.exception.UserWithNoRatings;
+import com.arthurvieira.cinerecommender.service.ContentService;
 import com.arthurvieira.cinerecommender.service.RecommendationService;
 import com.arthurvieira.cinerecommender.service.UserService;
 import com.arthurvieira.cinerecommender.ui.ConsoleMenu;
@@ -18,15 +19,18 @@ public class RecommendationController implements Controller {
     private final InputHandler inputHandler;
     private final RecommendationService recommendationService;
     private final UserService userService;
+    private final ContentService contentService;
 
     public RecommendationController(ConsoleMenu consoleMenu,
                                     InputHandler inputHandler,
                                     RecommendationService recommendationService,
-                                    UserService userService) {
+                                    UserService userService,
+                                    ContentService contentService) {
         this.consoleMenu = consoleMenu;
         this.inputHandler = inputHandler;
         this.recommendationService = recommendationService;
         this.userService = userService;
+        this.contentService = contentService;
     }
 
     public void start() {
@@ -49,6 +53,9 @@ public class RecommendationController implements Controller {
                     break;
                 case 4:
                     this.showNewReleasesContents();
+                    break;
+                case 5:
+                    this.showSimilarContents();
                     break;
                 case MenuOptions.BACK:
                     running = false;
@@ -111,5 +118,23 @@ public class RecommendationController implements Controller {
         List<Content> newReleases = this.recommendationService.recommendNewReleases();
 
         displayResults(newReleases,"Não foi possível encontrar os lançamentos e novidades!", this::printRecommendedContents);
+    }
+
+    private void showSimilarContents() {
+        int id = this.inputHandler.readPositiveInt("ID do conteúdo que você deseja ver conteúdos semelhantes: ");
+        try {
+            Content content = this.contentService.filterContentById(id);
+
+            List<Content> contentsBySimilarity = this.recommendationService.recommendSimilarContent(content);
+
+            System.out.println("\nConteúdos semelhantes a: " + content.getTitle());
+            displayResults(contentsBySimilarity,
+                    "Não foi possível encontrar avaliações suficientes de outros usuários para gerar semelhança com este conteúdo!",
+                    this::printRecommendedContents);
+        } catch (InvalidIdException e) {
+            System.out.println("O ID informado está inválido!");
+        } catch (ObjectNotExistException e) {
+            System.out.println("O conteúdo com ID " + id + " não existe!");
+        }
     }
 }

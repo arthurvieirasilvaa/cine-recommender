@@ -120,4 +120,28 @@ public class RecommendationService {
                 .limit(10)
                 .toList();
     }
+
+    public List<Content> recommendSimilarContent(Content content) {
+        // Getting the users who specifically liked this content (rating value >= 4.0):
+        Set<User> contentFans = this.ratingRepository.listAll().stream()
+                .filter(rating -> rating.getContent().equals(content))
+                .filter(rating -> rating.getStars() >= 4.0)
+                .map(Rating::getUser)
+                .collect(Collectors.toSet());
+
+        // Getting the number of occurrences of other highly-rated contents from those same users:
+        Map<Content, Long> similarityContentMap = this.ratingRepository.listAll()
+                .stream()
+                .filter(rating -> contentFans.contains(rating.getUser()))
+                .filter(rating -> !rating.getContent().equals(content))
+                .filter(rating -> rating.getStars() >= 4.0)
+                .collect(Collectors.groupingBy(Rating::getContent, Collectors.counting()));
+
+        // Returning 10 contents with the highest co-occurrence frequency:
+        return similarityContentMap.entrySet().stream()
+                .sorted(Map.Entry.<Content, Long>comparingByValue().reversed())
+                .limit(10)
+                .map(Map.Entry::getKey)
+                .toList();
+    }
 }

@@ -87,7 +87,7 @@ public class RecommendationService {
         // Getting the ratings made by the user with average >= 4.0:
         List<Rating> topRatings = userRatings
                 .stream()
-                .filter(rating -> rating.getContent().getAverageRating() >= 4.0)
+                .filter(rating -> rating.getStars() >= 4.0)
                 .toList();
 
         // Creating a set with content's genres the user has watched:

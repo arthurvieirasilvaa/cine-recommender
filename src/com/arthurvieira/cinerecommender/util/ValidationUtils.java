@@ -51,7 +51,7 @@ public class ValidationUtils {
 
     public static void validadeStars(int stars) {
         if(stars < MIN_STARS || stars > MAX_STARS) {
-            throw new IllegalArgumentException("The stars must betwenn "+MIN_STARS+" and "+MAX_STARS);
+            throw new IllegalArgumentException("As estrelas devem estar entre "+MIN_STARS+" e "+MAX_STARS);
         }
     }
 }

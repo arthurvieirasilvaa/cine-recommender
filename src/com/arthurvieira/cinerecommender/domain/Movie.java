@@ -30,17 +30,17 @@ public class Movie extends Content {
     }
 
     @Override
-    public void printContent() {
-        System.out.println("\t-> Filme "+this.getTitle()+" com ID "+this.getId()+":\n"+
+    public String formatContent() {
+        return "\t-> Filme "+this.getTitle()+" com ID "+this.getId()+":\n"+
                 "\t\t- Ano de lançamento: "+this.getReleaseYear()+"\n"+
                 "\t\t- Gênero: "+this.getGenre().getName()+"\n"+
                 "\t\t- Classificação Indicativa: "+this.getAgeRating().getDescription()+"\n"+
-                "\t\t- Duração: "+this.getDuration().toMinutes()+" minutos\n");
+                "\t\t- Duração: "+this.getDuration().toMinutes()+" minutos\n";
     }
 
     @Override
-    public void printSummary() {
-        System.out.println("\t\t - Filme: "+this.getTitle());
+    public String formatSummary() {
+        return "\t\t - Filme: "+this.getTitle();
     }
 
     public Duration getDuration() {

@@ -14,7 +14,7 @@ public class Rating {
         ValidationUtils.validateId(id);
         this.id = id;
 
-        this.user = Objects.requireNonNull(user, "O usuário não pode ser nulo");
+        this.user = Objects.requireNonNull(user, "O usuário não pode ser nulo!");
         this.content = Objects.requireNonNull(content, "O conteúdo não pode ser nulo!");
 
         ValidationUtils.validadeStars(stars);
@@ -49,7 +49,7 @@ public class Rating {
 
     public void printRating() {
         System.out.println("\t-> Avaliação com ID "+getId()+":");
-        this.getContent().printSummary();
+        System.out.println(this.getContent().formatSummary());
         System.out.println("\t\t - Nota: "+getStars()+"/5\n");
     }
 

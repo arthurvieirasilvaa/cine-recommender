@@ -19,7 +19,7 @@ public abstract class Content implements Rateable {
     protected Content(long id, String title, Year releaseYear, Genre genre, AgeRating ageRating, ContentType contentType) {
         ValidationUtils.validateId(id);
         this.id = id;
-        this.title = title;
+        this.title = Objects.requireNonNull(title, "O título não pode ser nulo!");
 
         ValidationUtils.validateReleaseYear(releaseYear);
         this.releaseYear = releaseYear;
@@ -42,8 +42,8 @@ public abstract class Content implements Rateable {
         return Objects.hashCode(id);
     }
 
-    public abstract void printContent();
-    public abstract void printSummary();
+    public abstract String formatContent();
+    public abstract String formatSummary();
 
     @Override
     public void addRating(Rating rating) {

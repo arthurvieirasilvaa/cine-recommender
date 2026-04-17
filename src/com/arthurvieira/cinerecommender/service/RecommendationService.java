@@ -1,7 +1,7 @@
 package com.arthurvieira.cinerecommender.service;
 
 import com.arthurvieira.cinerecommender.domain.*;
-import com.arthurvieira.cinerecommender.exception.UserWithNoRatings;
+import com.arthurvieira.cinerecommender.exception.UserWithNoRatingsException;
 import com.arthurvieira.cinerecommender.repository.ContentRepository;
 import com.arthurvieira.cinerecommender.repository.RatingRepository;
 
@@ -52,7 +52,7 @@ public class RecommendationService {
                 .stream()
                 .max(Map.Entry.comparingByValue())
                 .map(Map.Entry::getKey)
-                .orElseThrow(() -> new UserWithNoRatings("O usuário não possui avaliações!"));
+                .orElseThrow(() -> new UserWithNoRatingsException("O usuário não possui avaliações!"));
     }
 
     private List<Content> filterAndSortContents(Set<Long> watchedContentsIds, Predicate<Content> filter) {
@@ -69,7 +69,7 @@ public class RecommendationService {
         List<Rating> userRatings = this.getUserRatings(user);
 
         if (userRatings.isEmpty()) {
-            throw new UserWithNoRatings("O usuário não possui avaliações!");
+            throw new UserWithNoRatingsException("O usuário não possui avaliações!");
         }
 
         // Getting the ids of the contents the user has watched:

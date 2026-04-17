@@ -4,7 +4,7 @@ import com.arthurvieira.cinerecommender.domain.Content;
 import com.arthurvieira.cinerecommender.domain.User;
 import com.arthurvieira.cinerecommender.exception.InvalidIdException;
 import com.arthurvieira.cinerecommender.exception.ObjectNotExistException;
-import com.arthurvieira.cinerecommender.exception.UserWithNoRatings;
+import com.arthurvieira.cinerecommender.exception.UserWithNoRatingsException;
 import com.arthurvieira.cinerecommender.service.ContentService;
 import com.arthurvieira.cinerecommender.service.RecommendationService;
 import com.arthurvieira.cinerecommender.service.UserService;
@@ -67,7 +67,7 @@ public class RecommendationController implements Controller {
     }
 
     private void printRecommendedContents(Content content) {
-        content.printSummary();
+        System.out.println(content.formatSummary());
         System.out.printf("\t\t - Média: %.1f/5%n", content.getAverageRating());
         System.out.println("\t\t - Ano de lançamento: "+content.getReleaseYear());
         System.out.println("\t\t - Gênero: "+content.getGenre().getName());
@@ -92,7 +92,7 @@ public class RecommendationController implements Controller {
             System.out.println("O ID informado está inválido!");
         } catch (ObjectNotExistException e) {
             System.out.println("O usuário com ID "+id+" não existe!");
-        } catch (UserWithNoRatings e) {
+        } catch (UserWithNoRatingsException e) {
             System.out.println("O usuário não possui avaliações!");
         }
     }
@@ -109,7 +109,7 @@ public class RecommendationController implements Controller {
             System.out.println("O ID informado está inválido!");
         } catch (ObjectNotExistException e) {
             System.out.println("O usuário com ID " + id + " não existe!");
-        } catch (UserWithNoRatings e) {
+        } catch (UserWithNoRatingsException e) {
             System.out.println("O usuário não possui avaliações!");
         }
     }

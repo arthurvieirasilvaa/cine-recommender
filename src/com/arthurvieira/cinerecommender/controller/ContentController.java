@@ -112,14 +112,14 @@ public class ContentController implements Controller {
     private void listAllContents() {
         List<Content> contents = this.contentService.listAll();
 
-        displayResults(contents, "Ainda não há conteúdo cadastrado!", Content::printContent);
+        displayResults(contents, "Ainda não há conteúdo cadastrado!", content -> System.out.println(content.formatContent()));
     }
 
     private void searchById() {
         int id = this.inputHandler.readPositiveInt("ID: ");
         try {
             Content content = this.contentService.filterContentById(id);
-            content.printContent();
+            System.out.println(content.formatContent());;
         } catch (InvalidIdException e) {
             System.out.println("O ID informado está inválido!");
         } catch (ObjectNotExistException e) {
@@ -144,7 +144,7 @@ public class ContentController implements Controller {
         Genre genre = this.inputHandler.readEnum("Gênero: ", Genre.values());
 
         List<Content> contents = this.contentService.filterContentsByGenre(genre);
-        displayResults(contents, "Ainda não há conteúdo de "+genre.getName()+" cadastrado!", Content::printContent);
+        displayResults(contents, "Ainda não há conteúdo de "+genre.getName()+" cadastrado!", content -> System.out.println(content.formatContent()));
     }
 
     private void searchByContentType() {
@@ -153,7 +153,7 @@ public class ContentController implements Controller {
 
         List<Content> contents = this.contentService.filterContentsByContentType(contentType);
 
-        displayResults(contents, "Ainda não há conteúdo do tipo "+contentType.getType()+" cadastrado!", Content::printContent);
+        displayResults(contents, "Ainda não há conteúdo do tipo "+contentType.getType()+" cadastrado!", content -> System.out.println(content.formatContent()));
     }
 
     private void searchByAgeRating() {
@@ -162,6 +162,6 @@ public class ContentController implements Controller {
 
         List<Content> contents = this.contentService.filterContentsByAgeRating(ageRating);
 
-        displayResults(contents, "Ainda não há conteúdo da classificação indicativa "+ageRating.getDescription()+" cadastrado!", Content::printContent);
+        displayResults(contents, "Ainda não há conteúdo da classificação indicativa "+ageRating.getDescription()+" cadastrado!", content -> System.out.println(content.formatContent()));
     }
 }

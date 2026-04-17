@@ -18,7 +18,7 @@ public class User implements Rateable {
     public User(long id, String name, String email, LocalDate registrationDate) {
         ValidationUtils.validateId(id);
         this.id = id;
-        this.name = name;
+        this.name = Objects.requireNonNull(name, "O nome não pode ser nulo!");
 
         ValidationUtils.validateEmail(email);
         this.email = email;
@@ -54,11 +54,11 @@ public class User implements Rateable {
         return Objects.hash(id, email);
     }
 
-    public void printUser() {
-        System.out.println("\tID: "+this.getId()+"\n"+
+    public String formatUser() {
+        return "\tID: "+this.getId()+"\n"+
                 "\tNome: "+this.getName()+"\n"+
                 "\tEmail: "+this.getEmail()+"\n"+
-                "\tData do cadastro: "+this.formatDate()+"\n");
+                "\tData do cadastro: "+this.formatDate()+"\n";
     }
 
     public String formatDate() {
